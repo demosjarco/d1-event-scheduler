@@ -1,0 +1,71 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '09:00'
+      timezone: 'America/Phoenix'
+    open-pull-requests-limit: 999
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '09:00'
+      timezone: 'America/Phoenix'
+    open-pull-requests-limit: 999
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '09:00'
+      timezone: 'America/Phoenix'
+    open-pull-requests-limit: 999
+    groups:
+      artifacts:
+        patterns:
+          - 'actions/*-artifact'
+      caches:
+        patterns:
+          - 'actions/cache'
+          - 'actions/cache/*'
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '09:00'
+      timezone: 'America/Phoenix'
+    open-pull-requests-limit: 999
+    groups:
+      cloudflare:
+        patterns:
+          - '@cloudflare/*'
+          - 'wrangler'
+        exclude-patterns:
+          - '@cloudflare/workers-types'
+      typescript-core:
+        patterns:
+          - 'typescript'
+          - 'ts-node'
+          - '@swc/*'
+      typescript-types:
+        patterns:
+          - '@types/*'
+          - '@cloudflare/workers-types'
+      code-management:
+        patterns:
+          - 'prettier'
+          - 'prettier-plugin-*'
+          - '@demosjarco/prettier-config'
+          - 'eslint'
+          - 'eslint-plugin-*'
+          - '@typescript-eslint/*'
