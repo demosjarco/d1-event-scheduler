@@ -1,4 +1,5 @@
 import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLNonEmptyString } from 'graphql-scalars';
 import { BaseSchema } from '../../shared/baseSchema.mjs';
 
 export class QueryIndex extends BaseSchema {
@@ -7,7 +8,7 @@ export class QueryIndex extends BaseSchema {
 			name: 'Query',
 			fields: {
 				hello: {
-					type: new GraphQLNonNull(GraphQLString),
+					type: new GraphQLNonNull(GraphQLNonEmptyString),
 					resolve: () => 'Hello World!',
 				},
 			},
