@@ -45,7 +45,23 @@ updates:
       time: '09:00'
       timezone: 'America/Phoenix'
     open-pull-requests-limit: 999
+    ignore:
+      - dependency-name: 'sofa-api'
+        versions:
+          - '1.0.0'
+          - '0.18.1'
+          - '0.18.2'
     groups:
+      graphql:
+        patterns:
+          - 'graphql'
+          - 'graphql-*'
+          - '@graphql-yoga/*'
+          - 'sofa-api'
+      hono:
+        patterns:
+          - 'hono'
+          - '@hono/*'
       cloudflare:
         patterns:
           - '@cloudflare/*'
