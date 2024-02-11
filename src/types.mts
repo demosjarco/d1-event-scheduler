@@ -18,7 +18,9 @@ export interface EnvVars extends Secrets, Bindings, Record<string, any> {
 
 interface Secrets extends Record<string, any> {}
 
-interface Bindings {}
+interface Bindings {
+	D1_EVENT_SCHEDULER: DurableObjectNamespace;
+}
 
 export interface GqlContext extends EnvVars, ExecutionContext {
 	request: Request;

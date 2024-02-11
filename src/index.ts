@@ -11,6 +11,9 @@ import { runningLocally } from './extras.mjs';
 import { ApiSchema } from './gql/index.mjs';
 import type { EnvVars } from './types.mjs';
 
+// Re-export since workerd can only find from from `wrangler.toml`'s `main` file
+export { D1EventScheduler } from './do/D1EventScheduler.mjs';
+
 const app = new Hono<{ Bindings: EnvVars }>();
 const validApiMethods = ['POST', 'GET'];
 

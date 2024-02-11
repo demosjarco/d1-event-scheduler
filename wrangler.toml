@@ -4,3 +4,7 @@ compatibility_date = "2024-01-29"
 compatibility_flags = ["nodejs_compat"]
 workers_dev = false
 minify = true
+durable_objects.bindings = [
+    { name = "D1_EVENT_SCHEDULER", class_name = "D1EventScheduler" },
+]
+migrations = [{ tag = "v1", new_classes = ["D1EventScheduler"] }]
