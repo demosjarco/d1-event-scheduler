@@ -1,0 +1,19 @@
+{
+	"type": "module",
+	"scripts": {},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/demosjarco/d1-event-scheduler.git"
+	},
+	"author": "DemosJarco <1209494+demosjarco@users.noreply.github.com>",
+	"contributors": [],
+	"license": "Apache-2.0",
+	"private": true,
+	"bugs": {
+		"url": "https://github.com/demosjarco/d1-event-scheduler/issues"
+	},
+	"homepage": "https://github.com/demosjarco/d1-event-scheduler#readme",
+	"dependencies": {},
+	"devDependencies": {},
+	"optionalDependencies": {}
+}
