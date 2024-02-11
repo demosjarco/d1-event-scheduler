@@ -1,6 +1,8 @@
 {
 	"type": "module",
-	"scripts": {},
+	"scripts": {
+		"start": "wrangler dev --local-protocol https --ip localhost"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/demosjarco/d1-event-scheduler.git"
