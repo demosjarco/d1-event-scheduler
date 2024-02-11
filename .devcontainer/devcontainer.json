@@ -1,0 +1,70 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "Node.js",
+	"build": {
+		// Path is relative to the devcontainer.json file.
+		"dockerfile": "Dockerfile"
+	},
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"installZsh": true,
+			"configureZshAsDefaultShell": true,
+			"installOhMyZsh": true,
+			"installOhMyZshConfig": true,
+			"upgradePackages": true,
+			"username": "node",
+			"nonFreePackages": true
+		},
+		"ghcr.io/devcontainers/features/git:1": {
+			"version": "latest",
+			"ppa": "false"
+		},
+		"ghcr.io/devcontainers/features/github-cli:1": {
+			"version": "latest",
+			"installDirectlyFromGitHubRelease": true
+		},
+		"ghcr.io/devcontainers/features/node:1": {
+			"version": "none",
+			"nodeGypDependencies": false,
+			"nvmVersion": "latest"
+		}
+	},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [8787],
+	"portsAttributes": {
+		"8787": {
+			"elevateIfNeeded": true,
+			"label": "Worker",
+			"onAutoForward": "notify",
+			"protocol": "https"
+		}
+	},
+
+	// https://containers.dev/implementors/spec/#parallel-exec
+	// "onCreateCommand": {},
+	// "updateContentCommand": {},
+	"postCreateCommand": {
+		"fixMountPermissions": ["sudo", "chown", "-R", "node", "node_modules"],
+		"setupPackages": ["npm", "ci", "--include-workspace-root", "--workspaces"]
+	},
+	"postStartCommand": {
+		"updateCode": "git fetch && git pull --ff-only || git status"
+	},
+	// "postAttachCommand": {},
+
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": ["esbenp.prettier-vscode", "github.vscode-github-actions", "qwtel.sqlite-viewer", "redhat.vscode-yaml", "github.codespaces"]
+		}
+	},
+
+	"mounts": ["source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"],
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	"remoteUser": "node"
+}
