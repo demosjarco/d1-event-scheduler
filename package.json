@@ -1,6 +1,8 @@
 {
 	"type": "module",
 	"scripts": {
+		"fmt": "prettier --write .",
+		"fmt.check": "prettier --check .",
 		"start": "wrangler dev --local-protocol https --ip localhost"
 	},
 	"repository": {
