@@ -1,0 +1,6 @@
+name = "d1-event-scheduler"
+main = "src/index.ts"
+compatibility_date = "2024-01-29"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+minify = true
