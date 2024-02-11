@@ -16,8 +16,14 @@
 	},
 	"homepage": "https://github.com/demosjarco/d1-event-scheduler#readme",
 	"prettier": "@demosjarco/prettier-config",
+	"dependencies": {
+		"hono": "^4.0.1"
+	},
 	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20240208.0",
 		"@demosjarco/prettier-config": "^1.0.1",
-		"prettier": "^3.2.5"
+		"prettier": "^3.2.5",
+		"typescript": "^5.3.3",
+		"wrangler": "^3.28.1"
 	}
 }
