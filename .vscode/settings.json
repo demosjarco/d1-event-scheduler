@@ -1,0 +1,19 @@
+{
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "explicit",
+		"source.organizeImports": "explicit"
+	},
+	"typescript.preferences.importModuleSpecifier": "relative",
+	"typescript.tsdk": "./node_modules/typescript/lib",
+	"yaml.schemas": {
+		"https://json.schemastore.org/dependabot-2.0.json": "${workspaceFolder}/.github/dependabot.yml"
+	},
+	"json.schemas": [
+		{
+			"fileMatch": ["**/devcontainer.json"],
+			"url": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json"
+		}
+	],
+	"github-actions.workflows.pinned.workflows": []
+}
