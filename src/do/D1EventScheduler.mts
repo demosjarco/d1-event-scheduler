@@ -39,6 +39,11 @@ export class D1EventScheduler {
 			},
 		);
 
+		/**
+		 * Per event responder below
+		 * I'd do a separate hono router, but it breaks param()
+		 */
+
 		const eventPathWithRegex = '/:id{[0-9a-fA-F]+}';
 		app.get(eventPathWithRegex, async (c) => {
 			if (c.req.param('id') === this.state.id.toString()) {
