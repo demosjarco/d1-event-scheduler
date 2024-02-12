@@ -306,34 +306,67 @@ export class D1EventScheduler {
 	}
 
 	alarm() {
+		this.state.waitUntil(this.state.storage.put<EventDetail[EventDetailsKeys.LAST_EXECUTED]>(EventDetailsKeys.LAST_EXECUTED, new Date()));
 		// Needs `Awaited<>` or else it stacks `Promise<>`s
-		return new Promise<Awaited<ReturnType<NonNullable<DurableObject['alarm']>>>>((mainResolve, mainReject) => {
-			/**
-			 * @todo SQL stuff
-			 */
+		return new Promise<Awaited<ReturnType<NonNullable<DurableObject['alarm']>>>>((resolve, reject) =>
+			this.state.storage
+				.get<EventDetail[EventDetailsKeys.D1_BINDING]>(EventDetailsKeys.D1_BINDING)
+				.then((binding) => {
+					if (binding) {
+						if (this.env[binding] instanceof D1Database) {
+							const d1: D1Database = this.env[binding];
 
-			this.nextAlarmRun
-				.then((nextAlarmDate) => this.state.storage.setAlarm(nextAlarmDate.getTime()))
-				.catch(() =>
-					this.state.storage
-						.get<EventDetail[EventDetailsKeys.AUTO_DELETE]>(EventDetailsKeys.AUTO_DELETE)
-						.then((autoDelete) => {
-							if (autoDelete) {
-								this.env.D1_EVENT_SCHEDULER.get(this.state.id)
-									.fetch(
-										new Request(new URL(`/${this.state.id.toString()}`, 'https://d1.event'), {
-											// @ts-expect-error
-											cf: c.req.raw.cf,
-										}),
-									)
-									.then((response) => (response.ok ? mainResolve : mainReject(response.status)))
-									.catch(mainReject);
-							} else {
-								mainResolve();
-							}
-						})
-						.catch(mainReject),
-				);
-		});
+							this.state.storage
+								.get<EventDetail[EventDetailsKeys.EVENT_DEFINITION]>(EventDetailsKeys.EVENT_DEFINITION)
+								.then((definition) => {
+									if (definition) {
+										d1.batch(
+											definition.reduce<Parameters<D1Database['batch']>[0]>((acc, { sql, binds }) => {
+												acc.push(d1.prepare(sql).bind(binds));
+												return acc;
+											}, []),
+										)
+											.then(() => resolve())
+											.catch(reject);
+									} else {
+										reject(definition);
+									}
+								})
+								.catch(reject);
+						} else {
+							reject(this.env[binding].constructor.name);
+						}
+					} else {
+						reject(binding);
+					}
+				})
+				.catch(reject),
+		).finally(
+			() =>
+				new Promise<void>((resolve, reject) =>
+					this.nextAlarmRun
+						.then((nextAlarmDate) => this.state.storage.setAlarm(nextAlarmDate.getTime()))
+						.catch(() =>
+							this.state.storage
+								.get<EventDetail[EventDetailsKeys.AUTO_DELETE]>(EventDetailsKeys.AUTO_DELETE)
+								.then((autoDelete) => {
+									if (autoDelete) {
+										this.env.D1_EVENT_SCHEDULER.get(this.state.id)
+											.fetch(
+												new Request(new URL(`/${this.state.id.toString()}`, 'https://d1.event'), {
+													// @ts-expect-error
+													cf: c.req.raw.cf,
+												}),
+											)
+											.then((response) => (response.ok ? resolve : reject(response.status)))
+											.catch(reject);
+									} else {
+										resolve();
+									}
+								})
+								.catch(reject),
+						),
+				),
+		);
 	}
 }
