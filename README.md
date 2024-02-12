@@ -19,9 +19,10 @@ MySQL like Event Scheduler, but for Cloudflare D1
 
 -   [ ] One or more D1 instances to manage
 -   [ ] Workers Paid plan
-    > [!NOTE]
-    > Durable Objects are only available on the Workers Paid plan.
-    > https://developers.cloudflare.com/workers/platform/pricing/#durable-objects
+
+> [!NOTE]
+> Durable Objects are only available on the Workers Paid plan.
+> https://developers.cloudflare.com/workers/platform/pricing/#durable-objects
 
 ## Getting Started
 
