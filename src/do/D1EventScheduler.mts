@@ -20,7 +20,31 @@ export class D1EventScheduler {
 
 		app.get('/', async (c) => {
 			try {
-				return c.json((await this.state.storage.get<DefinedEvent[]>('events', { allowConcurrency: true })) ?? []);
+				const temp: Promise<EventDetail>[] = [];
+
+				for (const event of (await this.state.storage.get<DefinedEvent[]>('events', { allowConcurrency: true })) ?? []) {
+					temp.push(
+						new Promise<EventDetail>((resolve, reject) => {
+							this.env.D1_EVENT_SCHEDULER.get(this.env.D1_EVENT_SCHEDULER.idFromString(event.id))
+								.fetch(
+									new Request(new URL(`/${event.id}`, 'https://d1.event'), {
+										// @ts-expect-error
+										cf: c.req.raw.cf,
+									}),
+								)
+								.then((response) => {
+									if (response.ok) {
+										response.json<EventDetail>().then(resolve).catch(reject);
+									} else {
+										reject(response.status);
+									}
+								})
+								.catch(reject);
+						}),
+					);
+				}
+
+				return c.json(await Promise.all(temp));
 			} catch (error) {
 				throw new HTTPException(500, { message: (error as Error).message });
 			}
