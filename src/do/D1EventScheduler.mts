@@ -1,6 +1,8 @@
 import { Hono } from 'hono';
+import { HTTPException } from 'hono/http-exception';
 import { timing } from 'hono/timing';
 import type { EnvVars } from '../types.mjs';
+import { EventDetailsKeys, type DefinedEvent } from './types.mjs';
 
 export class D1EventScheduler {
 	private state: DurableObjectState;
@@ -16,10 +18,42 @@ export class D1EventScheduler {
 
 		app.use('*', timing());
 
-		app.get('/', (c) => {
-			console.debug(c.req.raw.url);
-			return c.text('Hello world');
+		app.get('/', async (c) => {
+			try {
+				return c.json((await this.state.storage.get<DefinedEvent[]>('events', { allowConcurrency: true })) ?? []);
+			} catch (error) {
+				throw new HTTPException(500, { message: (error as Error).message });
+			}
 		});
+
+		app.get('/:id{[0-9a-fA-F]+}', async (c) => {
+			const keys = Object.keys(EventDetailsKeys);
+			const eventInfo = await Promise.all(keys.map((key) => this.state.storage.get(key, { allowConcurrency: true })));
+
+			return c.json(
+				keys.reduce(
+					(acc, key, index) => {
+						acc[key] = eventInfo[index];
+						return acc;
+					},
+					{} as { [key: string]: unknown },
+				),
+			);
+		})
+			.put((c) => {
+				return c.text('Hello world');
+			})
+			.patch((c) => {
+				return c.text('Hello world');
+			})
+			.delete(async (c) => {
+				try {
+					await this.state.storage.deleteAll();
+					return c.text('Deleted event');
+				} catch (error) {
+					throw new HTTPException(500, { message: (error as Error).message });
+				}
+			});
 
 		return app.fetch(request, this.env, { waitUntil: this.state.waitUntil, passThroughOnException() {} });
 	}
