@@ -13,6 +13,7 @@ export enum EventDetailsKeys {
 	EXECUTE_AT = 'EXECUTE_AT',
 	INTERVAL_VALUE = 'INTERVAL_VALUE',
 	INTERVAL_FIELD = 'INTERVAL_FIELD',
+	CRON = 'CRON',
 	STARTS = 'STARTS',
 	ENDS = 'ENDS',
 	ENABLED = 'STATUS',
@@ -40,6 +41,7 @@ export interface EventDetail {
 	 */
 	[EventDetailsKeys.INTERVAL_VALUE]?: number;
 	[EventDetailsKeys.INTERVAL_FIELD]?: 'MILLISECONDS' | 'SECONDS' | 'MINUTES' | 'HOURS' | 'DAYS' | 'WEEKS' | 'MONTHS' | 'QUARTERS' | 'YEARS';
+	[EventDetailsKeys.CRON]?: `${string} ${string} ${string} ${string} ${string}`;
 	[EventDetailsKeys.STARTS]: Date;
 	[EventDetailsKeys.ENABLED]: boolean;
 	[EventDetailsKeys.AUTO_DELETE]: boolean;
