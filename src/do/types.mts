@@ -28,7 +28,7 @@ export interface EventDetail {
 	[EventDetailsKeys.D1_BINDING]: string;
 	[EventDetailsKeys.EVENT_NAME]: string;
 	[EventDetailsKeys.DEFINER]: string;
-	[EventDetailsKeys.TIME_ZONE]: 'SYSTEM' | NonNullable<NonNullable<Parameters<Date['toLocaleString']>[1]>['timeZone']>;
+	[EventDetailsKeys.TIME_ZONE]: NonNullable<NonNullable<Parameters<Date['toLocaleString']>[1]>['timeZone']>;
 	[EventDetailsKeys.EVENT_DEFINITION]: {
 		sql: Parameters<D1Database['prepare']>[0];
 		binds: Parameters<ReturnType<D1Database['prepare']>['bind']>;
