@@ -50,4 +50,4 @@ export interface EventDetail {
 	[EventDetailsKeys.EVENT_COMMENT]?: string;
 }
 
-export type EventDetailGQL = Pick<EventDetail, EventDetailsKeys.D1_BINDING | EventDetailsKeys.EVENT_NAME | EventDetailsKeys.TIME_ZONE | EventDetailsKeys.EVENT_DEFINITION | EventDetailsKeys.EVENT_TYPE | EventDetailsKeys.EXECUTE_AT | EventDetailsKeys.INTERVAL_VALUE | EventDetailsKeys.INTERVAL_FIELD | EventDetailsKeys.CRON | EventDetailsKeys.STARTS | EventDetailsKeys.ENDS | EventDetailsKeys.ENABLED | EventDetailsKeys.AUTO_DELETE | EventDetailsKeys.EVENT_COMMENT>;
+export interface EventDetailGQL extends Pick<EventDetail, EventDetailsKeys.D1_BINDING | EventDetailsKeys.EVENT_NAME | EventDetailsKeys.TIME_ZONE | EventDetailsKeys.EVENT_DEFINITION | EventDetailsKeys.EVENT_TYPE | EventDetailsKeys.EXECUTE_AT | EventDetailsKeys.INTERVAL_VALUE | EventDetailsKeys.INTERVAL_FIELD | EventDetailsKeys.CRON | EventDetailsKeys.ENDS | EventDetailsKeys.ENABLED | EventDetailsKeys.AUTO_DELETE | EventDetailsKeys.EVENT_COMMENT>, Partial<Pick<EventDetail, EventDetailsKeys.STARTS>> {}

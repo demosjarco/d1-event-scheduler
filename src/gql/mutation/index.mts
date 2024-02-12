@@ -107,13 +107,8 @@ export class MutationIndex extends BaseSchema {
 							description: 'Interval or CRON must be used with RECURRING',
 						},
 						[EventDetailsKeys.STARTS]: {
-							type: new GraphQLNonNull(GraphQLDateTimeISO),
-							description: 'When the event should begin repeating. Ignored for ONE TIME',
-							defaultValue: () => {
-								const now = new Date();
-								const nowUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-								return new Date(nowUTC).toISOString();
-							},
+							type: GraphQLDateTimeISO,
+							description: 'When the event should begin repeating. Ignored for ONE TIME. Defaults to now',
 						},
 						[EventDetailsKeys.ENDS]: {
 							type: GraphQLDateTimeISO,
