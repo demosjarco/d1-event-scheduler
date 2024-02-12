@@ -115,6 +115,16 @@ export class D1EventScheduler {
 				try {
 					const incoming = await c.req.json<EventDetailGQL>();
 
+					if (incoming[EventDetailsKeys.EVENT_TYPE] === 'ONE TIME') {
+						if (!incoming[EventDetailsKeys.EXECUTE_AT]) {
+							throw new HTTPException(400, { message: `Missing ${EventDetailsKeys.EXECUTE_AT}` });
+						}
+					} else if (incoming[EventDetailsKeys.EVENT_TYPE] === 'RECURRING') {
+						if (!incoming[EventDetailsKeys.CRON] && !(incoming[EventDetailsKeys.INTERVAL_VALUE] !== undefined && incoming[EventDetailsKeys.INTERVAL_FIELD])) {
+							throw new HTTPException(400, { message: `Missing ${EventDetailsKeys.CRON} or (${EventDetailsKeys.INTERVAL_VALUE} and ${EventDetailsKeys.INTERVAL_FIELD})` });
+						}
+					}
+
 					const saving: EventDetail = {
 						[EventDetailsKeys.STARTS]: new Date(),
 						...incoming,
