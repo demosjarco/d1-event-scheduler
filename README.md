@@ -50,3 +50,14 @@ MySQL like Event Scheduler, but for Cloudflare D1
 | REST           | `/`                  |
 | Swagger Docs   | `/docs`              |
 | OpenAPI Schema | `/docs/openapi.json` |
+
+## Internal nerd stuff
+
+-   REST is auto generated with [`sofa-api`](https://the-guild.dev/graphql/sofa-api) from GraphQL schemas
+    -   REST API is still subject to the same GraphQL schema and validation
+-   GraphQL and REST are both behind `hono`.
+-   Each DO fetch handler is behind `hono`
+-   Internal DO fetch handler runs on `https://d1.event/:id?` url scheme
+    -   Main DO object responds on `/` while every event DO responds on `/:id`
+-   The API has [`csrf`](https://hono.dev/middleware/builtin/csrf), [`cors`](https://hono.dev/middleware/builtin/cors), [`secureHeaders`](https://hono.dev/middleware/builtin/secure-headers), [`etag`](https://hono.dev/middleware/builtin/etag), and [`timing`](https://hono.dev/middleware/builtin/timing) enabled
+    -   Comming soon: The duration of all internal tasks will be reported via timing header (visible in Network tools of browser)
