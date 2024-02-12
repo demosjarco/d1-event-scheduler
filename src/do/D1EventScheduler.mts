@@ -145,7 +145,7 @@ export class D1EventScheduler {
 						EVENT_ID: this.state.id.toString(),
 					});
 				} catch (error) {
-					throw new HTTPException(500, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
+					throw new HTTPException(500, { message: (error as Error).message });
 				}
 			} else {
 				throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
