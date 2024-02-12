@@ -1,7 +1,7 @@
 import { parseExpression } from 'cron-parser';
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
-import { timing } from 'hono/timing';
+import { endTime, startTime, timing } from 'hono/timing';
 import type { EnvVars } from '../types.mjs';
 import { EventDetailsKeys, type DefinedEvent, type EventDetail, type EventDetailGQL } from './types.mjs';
 
@@ -23,7 +23,9 @@ export class D1EventScheduler {
 			try {
 				const combinedFullDetail: Promise<EventDetail>[] = [];
 
+				startTime(c, `load-events`);
 				for (const event of (await this.state.storage.get<DefinedEvent[]>('events', { allowConcurrency: true })) ?? []) {
+					startTime(c, `load-event-${event.id}`);
 					combinedFullDetail.push(
 						new Promise<EventDetail>((resolve, reject) => {
 							this.env.D1_EVENT_SCHEDULER.get(this.env.D1_EVENT_SCHEDULER.idFromString(event.id))
@@ -40,12 +42,15 @@ export class D1EventScheduler {
 										reject(response.status);
 									}
 								})
-								.catch(reject);
+								.catch(reject)
+								.finally(() => endTime(c, `load-event-${event.id}`));
 						}),
 					);
 				}
 
-				return c.json(await Promise.all(combinedFullDetail));
+				const jsons = await Promise.all(combinedFullDetail);
+				endTime(c, `load-events`);
+				return c.json(jsons);
 			} catch (error) {
 				throw new HTTPException(500, { message: (error as Error).message });
 			}
