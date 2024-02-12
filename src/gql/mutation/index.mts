@@ -1,6 +1,6 @@
 import { GraphQLBoolean, GraphQLEnumType, GraphQLError, GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, type GraphQLResolveInfo } from 'graphql';
 import { GraphQLDateTimeISO, GraphQLJSON, GraphQLJSONObject, GraphQLNonEmptyString, GraphQLPositiveInt, GraphQLTimeZone } from 'graphql-scalars';
-import { EventDetailsKeys, type EventDetailGQL } from '../../do/types.mjs';
+import { EventDetailsKeys, type EventDetail, type EventDetailGQL } from '../../do/types.mjs';
 import { BaseSchema } from '../../shared/baseSchema.mjs';
 import type { GqlContext } from '../../types.mjs';
 
