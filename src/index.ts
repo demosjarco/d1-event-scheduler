@@ -28,7 +28,6 @@ app.use('*', (c, next) => {
 app.use('*', secureHeaders());
 
 app.use('*', etag());
-
 app.use('*', timing());
 app.use('*', async (c, next) => {
 	/**
