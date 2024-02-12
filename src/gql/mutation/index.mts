@@ -143,9 +143,7 @@ export class MutationIndex extends BaseSchema {
 								},
 								// @ts-expect-error
 								cf: context.request.cf,
-								body: JSON.stringify({
-									body: 'Something',
-								}),
+								body: JSON.stringify(args),
 							}),
 						);
 
