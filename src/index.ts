@@ -4,6 +4,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { csrf } from 'hono/csrf';
 import { etag } from 'hono/etag';
+import { secureHeaders } from 'hono/secure-headers';
 import { timing } from 'hono/timing';
 import { useSofa } from 'sofa-api';
 import { runningLocally } from './extras.mjs';
@@ -24,6 +25,7 @@ app.use('*', (c, next) => {
 		maxAge: 300,
 	})(c, next);
 });
+app.use('*', secureHeaders());
 
 app.use('*', etag());
 
