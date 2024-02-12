@@ -1,6 +1,8 @@
+import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { timing } from 'hono/timing';
+import { z } from 'zod';
 import type { EnvVars } from '../types.mjs';
 import { EventDetailsKeys, type DefinedEvent } from './types.mjs';
 
@@ -40,9 +42,18 @@ export class D1EventScheduler {
 				),
 			);
 		})
-			.put((c) => {
-				return c.text('Hello world');
-			})
+			.put(
+				zValidator(
+					'json',
+					z.object({
+						body: z.string(),
+					}),
+				),
+				(c) => {
+					const { body } = c.req.valid('json');
+					return c.text('Hello world');
+				},
+			)
 			.patch((c) => {
 				return c.text('Hello world');
 			})
