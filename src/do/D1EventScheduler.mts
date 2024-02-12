@@ -88,9 +88,41 @@ export class D1EventScheduler {
 		});
 		app.on(['POST', 'PUT'], eventPathWithRegex, async (c) => {
 			if (c.req.param('id') === this.state.id.toString()) {
-				const incoming = await c.req.json<EventDetailGQL>();
+				try {
+					const incoming = await c.req.json<EventDetailGQL>();
 
-				return c.json(incoming);
+					const saving: EventDetail = {
+						[EventDetailsKeys.STARTS]: new Date(),
+						...incoming,
+						[EventDetailsKeys.CREATED]: new Date(),
+						[EventDetailsKeys.LAST_ALTERED]: new Date(),
+					};
+
+					await Promise.all([
+						this.state.storage.put<any>(saving),
+						this.env.D1_EVENT_SCHEDULER.get(this.env.D1_EVENT_SCHEDULER.idFromName('d1.event')).fetch(
+							new Request(new URL('https://d1.event'), {
+								method: 'PATCH',
+								headers: {
+									'Content-Type': 'application/json',
+								},
+								// @ts-expect-error
+								cf: c.req.raw.cf,
+								body: JSON.stringify({
+									id: this.state.id.toString(),
+									name: this.state.id.name ?? saving[EventDetailsKeys.EVENT_NAME],
+								} as DefinedEvent),
+							}),
+						),
+					]);
+
+					return c.json({
+						EVENT_ID: this.state.id.toString(),
+						...saving,
+					});
+				} catch (error) {
+					throw new HTTPException(500, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
+				}
 			} else {
 				throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
 			}
