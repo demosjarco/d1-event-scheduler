@@ -43,6 +43,7 @@ export interface EventDetail {
 	[EventDetailsKeys.INTERVAL_FIELD]?: 'MILLISECONDS' | 'SECONDS' | 'MINUTES' | 'HOURS' | 'DAYS' | 'WEEKS' | 'MONTHS' | 'QUARTERS' | 'YEARS';
 	[EventDetailsKeys.CRON]?: `${string} ${string} ${string} ${string} ${string}`;
 	[EventDetailsKeys.STARTS]: Date;
+	[EventDetailsKeys.ENDS]?: Date;
 	[EventDetailsKeys.ENABLED]: boolean;
 	[EventDetailsKeys.AUTO_DELETE]: boolean;
 	[EventDetailsKeys.CREATED]: Date;
