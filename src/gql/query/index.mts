@@ -35,10 +35,7 @@ export class QueryIndex extends BaseSchema {
 							);
 
 							try {
-								return {
-									EVENT_ID: id,
-									...(await response.json<EventDetail>()),
-								};
+								return await response.json<EventDetail>();
 							} catch (error) {
 								throw new GraphQLError((error as Error).message);
 							}

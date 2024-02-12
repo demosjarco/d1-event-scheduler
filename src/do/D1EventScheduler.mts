@@ -72,15 +72,16 @@ export class D1EventScheduler {
 				const keys = Object.keys(EventDetailsKeys);
 				const eventInfo = await Promise.all(keys.map((key) => this.state.storage.get(key, { allowConcurrency: true })));
 
-				return c.json(
-					keys.reduce(
+				return c.json({
+					EVENT_ID: this.state.id.toString(),
+					...keys.reduce(
 						(acc, key, index) => {
 							acc[key] = eventInfo[index];
 							return acc;
 						},
 						{} as { [key: string]: unknown },
 					),
-				);
+				});
 			} else {
 				throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
 			}
