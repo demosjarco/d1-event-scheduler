@@ -26,18 +26,7 @@ export class D1EventScheduler {
 			} catch (error) {
 				throw new HTTPException(500, { message: (error as Error).message });
 			}
-		}).post(
-			zValidator(
-				'json',
-				z.object({
-					body: z.string(),
-				}),
-			),
-			(c) => {
-				const { body } = c.req.valid('json');
-				return c.text('Hello world');
-			},
-		);
+		});
 
 		/**
 		 * Per event responder below
