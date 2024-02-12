@@ -29,15 +29,6 @@ app.use('*', secureHeaders());
 
 app.use('*', etag());
 app.use('*', timing());
-app.use('*', async (c, next) => {
-	/**
-	 * Dev debug injection point
-	 */
-	if (c.env.NODE_ENV === 'development') {
-	}
-
-	return next();
-});
 
 /**
  * @todo Insert auth middleware or put this behind something like Cloudflare ZT Access
