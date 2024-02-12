@@ -246,11 +246,23 @@ export class D1EventScheduler {
 		return newDate;
 	}
 
-	private static calculateNextInstance(intervalValue: number, intervalType: NonNullable<EventDetail[EventDetailsKeys.INTERVAL_FIELD]>, startDate: Date, currentDate: Date = new Date()): Date {
+	private static calculateNextInstance(intervalValue: number, intervalType: NonNullable<EventDetail[EventDetailsKeys.INTERVAL_FIELD]>, startDate: Date, endDate?: Date, currentDate: Date = new Date()) {
+		// Don't even bother calculating
+		if (endDate && currentDate > endDate) {
+			throw new Error('Already expired');
+		}
+
 		let nextInstance = startDate;
-		while (nextInstance <= currentDate) {
+
+		while (nextInstance <= currentDate && (endDate ? nextInstance <= endDate : true)) {
 			nextInstance = this.addIntervalToDate(nextInstance, intervalValue, intervalType);
 		}
+
+		// Not able to generate run date after now
+		if (nextInstance < currentDate) {
+			throw new Error('Already expired');
+		}
+
 		return nextInstance;
 	}
 
@@ -269,10 +281,14 @@ export class D1EventScheduler {
 									resolve(parseExpression(cronString).next().toDate());
 								} else {
 									this.state.storage
-										.get([EventDetailsKeys.INTERVAL_VALUE, EventDetailsKeys.INTERVAL_FIELD, EventDetailsKeys.STARTS])
+										.get([EventDetailsKeys.INTERVAL_VALUE, EventDetailsKeys.INTERVAL_FIELD, EventDetailsKeys.STARTS, EventDetailsKeys.ENDS])
 										.then((test) => {
-											if (test.size === 3) {
-												resolve(D1EventScheduler.calculateNextInstance(test.get(EventDetailsKeys.INTERVAL_VALUE) as number, test.get(EventDetailsKeys.INTERVAL_FIELD) as NonNullable<EventDetail[EventDetailsKeys.INTERVAL_FIELD]>, test.get(EventDetailsKeys.STARTS) as Date));
+											if (test.size === 3 || test.size === 4) {
+												try {
+													resolve(D1EventScheduler.calculateNextInstance(test.get(EventDetailsKeys.INTERVAL_VALUE) as number, test.get(EventDetailsKeys.INTERVAL_FIELD) as NonNullable<EventDetail[EventDetailsKeys.INTERVAL_FIELD]>, test.get(EventDetailsKeys.STARTS) as Date, test.get(EventDetailsKeys.ENDS) as Date | undefined));
+												} catch (error) {
+													reject('Date not available');
+												}
 											} else {
 												reject('Missing cron & interval');
 											}
