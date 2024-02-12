@@ -207,5 +207,39 @@ export class D1EventScheduler {
 		return app.fetch(request, this.env, { waitUntil: this.state.waitUntil, passThroughOnException() {} });
 	}
 
+	private static addIntervalToDate(date: Date, interval: number, type: NonNullable<EventDetail[EventDetailsKeys.INTERVAL_FIELD]>): Date {
+		const newDate = new Date(date.getTime());
+		switch (type) {
+			case 'MILLISECONDS':
+				newDate.setMilliseconds(newDate.getMilliseconds() + interval);
+				break;
+			case 'SECONDS':
+				newDate.setSeconds(newDate.getSeconds() + interval);
+				break;
+			case 'MINUTES':
+				newDate.setMinutes(newDate.getMinutes() + interval);
+				break;
+			case 'HOURS':
+				newDate.setHours(newDate.getHours() + interval);
+				break;
+			case 'DAYS':
+				newDate.setDate(newDate.getDate() + interval);
+				break;
+			case 'WEEKS':
+				newDate.setDate(newDate.getDate() + interval * 7);
+				break;
+			case 'MONTHS':
+				newDate.setMonth(newDate.getMonth() + interval);
+				break;
+			case 'QUARTERS':
+				newDate.setMonth(newDate.getMonth() + interval * 3);
+				break;
+			case 'YEARS':
+				newDate.setFullYear(newDate.getFullYear() + interval);
+				break;
+		}
+		return newDate;
+	}
+
 	alarm(): ReturnType<DurableObject['alarm']> {}
 }
