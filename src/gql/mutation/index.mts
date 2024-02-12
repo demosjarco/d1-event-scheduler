@@ -1,6 +1,6 @@
 import { GraphQLBoolean, GraphQLEnumType, GraphQLError, GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, type GraphQLResolveInfo } from 'graphql';
 import { GraphQLDateTimeISO, GraphQLJSON, GraphQLNonEmptyString, GraphQLPositiveInt, GraphQLTimeZone } from 'graphql-scalars';
-import type { EventDetail, EventDetailGQL } from '../../do/types.mjs';
+import { EventDetailsKeys, type EventDetail, type EventDetailGQL } from '../../do/types.mjs';
 import { BaseSchema } from '../../shared/baseSchema.mjs';
 import type { GqlContext } from '../../types.mjs';
 
@@ -11,19 +11,19 @@ export class MutationIndex extends BaseSchema {
 			fields: {
 				createEvent: {
 					args: {
-						d1Binding: {
+						[EventDetailsKeys.D1_BINDING]: {
 							type: new GraphQLNonNull(GraphQLID),
 							description: 'The name of the D1 binding to use',
 						},
-						eventName: {
+						[EventDetailsKeys.EVENT_NAME]: {
 							type: new GraphQLNonNull(GraphQLNonEmptyString),
 							description: 'Name of the scheduled event',
 						},
-						timeZone: {
+						[EventDetailsKeys.TIME_ZONE]: {
 							type: new GraphQLNonNull(GraphQLTimeZone),
 							defaultValue: 'Etc/GMT',
 						},
-						sqls: {
+						[EventDetailsKeys.EVENT_DEFINITION]: {
 							type: new GraphQLNonNull(
 								new GraphQLList(
 									new GraphQLNonNull(
@@ -44,7 +44,7 @@ export class MutationIndex extends BaseSchema {
 								),
 							),
 						},
-						type: {
+						[EventDetailsKeys.EVENT_TYPE]: {
 							type: new GraphQLNonNull(
 								new GraphQLEnumType({
 									name: 'MutationCreateEventType',
@@ -59,15 +59,15 @@ export class MutationIndex extends BaseSchema {
 								}),
 							),
 						},
-						executeAt: {
+						[EventDetailsKeys.EXECUTE_AT]: {
 							type: GraphQLDateTimeISO,
 							description: 'For `ONE TIME` events, this is when it will fire. Ignored for RECURRING',
 						},
-						intervalValue: {
+						[EventDetailsKeys.INTERVAL_VALUE]: {
 							type: GraphQLPositiveInt,
 							description: 'Used in pair with intervalField. Interval or CRON must be used with RECURRING',
 						},
-						intervalField: {
+						[EventDetailsKeys.INTERVAL_FIELD]: {
 							type: new GraphQLEnumType({
 								name: 'MutationCreateEventIntervalField',
 								values: {
@@ -102,11 +102,11 @@ export class MutationIndex extends BaseSchema {
 							}),
 							description: 'Used in pair with intervalField. Interval or CRON must be used with RECURRING',
 						},
-						cron: {
+						[EventDetailsKeys.CRON]: {
 							type: GraphQLNonEmptyString,
 							description: 'Interval or CRON must be used with RECURRING',
 						},
-						starts: {
+						[EventDetailsKeys.STARTS]: {
 							type: new GraphQLNonNull(GraphQLDateTimeISO),
 							description: 'When the event should begin repeating. Ignored for ONE TIME',
 							defaultValue: () => {
@@ -115,29 +115,29 @@ export class MutationIndex extends BaseSchema {
 								return new Date(nowUTC).toISOString();
 							},
 						},
-						ends: {
+						[EventDetailsKeys.ENDS]: {
 							type: GraphQLDateTimeISO,
 							description: 'Optionally, when the event should stop repeating. If omitted, that means the event continues executing indefinitely. See auto delete for related options',
 						},
-						enabled: {
+						[EventDetailsKeys.ENABLED]: {
 							type: new GraphQLNonNull(GraphQLBoolean),
 							description: 'Whether the event will execute or not',
 							defaultValue: true,
 						},
-						autoDelete: {
+						[EventDetailsKeys.AUTO_DELETE]: {
 							type: new GraphQLNonNull(GraphQLBoolean),
 							description: 'Whether the event will auto delete upon excuting (for ONE TIME events) or reaches `ENDS` (if specified)',
 							defaultValue: true,
 						},
-						comment: {
+						[EventDetailsKeys.EVENT_COMMENT]: {
 							type: GraphQLNonEmptyString,
 							description: 'Provide a description of the event',
 						},
 					},
 					type: GraphQLJSON,
 					resolve: async (obj: {}, args: EventDetailGQL, context: GqlContext, info: GraphQLResolveInfo) => {
-						if (args.sqls.length > 0) {
-							const doId = context.D1_EVENT_SCHEDULER.idFromName(args.eventName);
+						if (args[EventDetailsKeys.EVENT_DEFINITION].length > 0) {
+							const doId = context.D1_EVENT_SCHEDULER.idFromName(args[EventDetailsKeys.EVENT_NAME]);
 							const response = await context.D1_EVENT_SCHEDULER.get(doId).fetch(
 								new Request(new URL(doId.toString(), 'https://d1.event'), {
 									method: 'POST',

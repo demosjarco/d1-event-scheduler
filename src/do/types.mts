@@ -52,19 +52,4 @@ export interface EventDetail {
 	[EventDetailsKeys.EVENT_COMMENT]?: string;
 }
 
-export interface EventDetailGQL {
-	d1Binding: EventDetail[EventDetailsKeys.D1_BINDING];
-	eventName: EventDetail[EventDetailsKeys.EVENT_NAME];
-	timeZone: EventDetail[EventDetailsKeys.TIME_ZONE];
-	sqls: EventDetail[EventDetailsKeys.EVENT_DEFINITION];
-	type: EventDetail[EventDetailsKeys.EVENT_TYPE];
-	executeAt?: EventDetail[EventDetailsKeys.EXECUTE_AT];
-	intervalValue?: EventDetail[EventDetailsKeys.INTERVAL_VALUE];
-	intervalField?: EventDetail[EventDetailsKeys.INTERVAL_FIELD];
-	cron?: EventDetail[EventDetailsKeys.CRON];
-	starts: EventDetail[EventDetailsKeys.STARTS];
-	ends?: EventDetail[EventDetailsKeys.ENDS];
-	enabled: EventDetail[EventDetailsKeys.ENABLED];
-	autoDelete: EventDetail[EventDetailsKeys.AUTO_DELETE];
-	comment?: EventDetail[EventDetailsKeys.EVENT_COMMENT];
-}
+export type EventDetailGQL = Pick<EventDetail, EventDetailsKeys.D1_BINDING | EventDetailsKeys.EVENT_NAME | EventDetailsKeys.TIME_ZONE | EventDetailsKeys.EVENT_DEFINITION | EventDetailsKeys.EVENT_TYPE | EventDetailsKeys.EXECUTE_AT | EventDetailsKeys.INTERVAL_VALUE | EventDetailsKeys.INTERVAL_FIELD | EventDetailsKeys.CRON | EventDetailsKeys.STARTS | EventDetailsKeys.ENDS | EventDetailsKeys.ENABLED | EventDetailsKeys.AUTO_DELETE | EventDetailsKeys.EVENT_COMMENT>;
