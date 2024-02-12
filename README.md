@@ -43,3 +43,10 @@ MySQL like Event Scheduler, but for Cloudflare D1
 
 4.  Deploy
 5.  Use GraphQL or REST apis to create, view, edit, or delete events
+
+| Service        | Route                |
+| -------------- | -------------------- |
+| GraphQL        | `/graphql`           |
+| REST           | `/`                  |
+| Swagger Docs   | `/docs`              |
+| OpenAPI Schema | `/docs/openapi.json` |
