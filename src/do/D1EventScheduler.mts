@@ -73,7 +73,6 @@ export class D1EventScheduler {
 				const eventInfo = await Promise.all(keys.map((key) => this.state.storage.get(key, { allowConcurrency: true })));
 
 				return c.json({
-					EVENT_ID: this.state.id.toString(),
 					...keys.reduce(
 						(acc, key, index) => {
 							acc[key] = eventInfo[index];
@@ -81,6 +80,7 @@ export class D1EventScheduler {
 						},
 						{} as { [key: string]: unknown },
 					),
+					EVENT_ID: this.state.id.toString(),
 				});
 			} else {
 				throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
@@ -117,8 +117,8 @@ export class D1EventScheduler {
 					]);
 
 					return c.json({
-						EVENT_ID: this.state.id.toString(),
 						...saving,
+						EVENT_ID: this.state.id.toString(),
 					});
 				} catch (error) {
 					throw new HTTPException(500, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
