@@ -47,7 +47,7 @@ export class D1EventScheduler {
 
 				const existing = (await this.state.storage.get<DefinedEvent[]>('events', { allowConcurrency: true })) ?? [];
 				const index = existing.findIndex((event) => event.id === incoming.id);
-				if (index !== -1) {
+				if (index > -1) {
 					existing.splice(index, 1);
 
 					await this.state.storage.put<DefinedEvent[]>('events', Array.from(existing));
