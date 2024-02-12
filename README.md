@@ -41,7 +41,7 @@ MySQL like Event Scheduler, but for Cloudflare D1
 > An alternative is to embed your own custom authentication as a middleware (this project uses [`hono`](https://hono.dev/))
 > See [`@todo` comment in `index.ts`](src/index.ts#L43)
 
-4.  Deploy
+4.  Deploy via Wrangler
 5.  Use GraphQL or REST apis to create, view, edit, or delete events
 
 | Service        | Route                |
