@@ -154,7 +154,11 @@ export class D1EventScheduler {
 									} as DefinedEvent),
 								}),
 							)
-							.then((response) => console.debug(response.status, response.statusText)),
+							.then((response) => {
+								if (!response.ok) {
+									throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+								}
+							}),
 					]);
 
 					return c.json({});
