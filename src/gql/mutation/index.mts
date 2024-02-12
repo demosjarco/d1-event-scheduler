@@ -26,19 +26,21 @@ export class MutationIndex extends BaseSchema {
 						sqls: {
 							type: new GraphQLNonNull(
 								new GraphQLList(
-									new GraphQLInputObjectType({
-										name: 'MutationCreateEventSqls',
-										fields: {
-											sql: {
-												type: new GraphQLNonNull(GraphQLNonEmptyString),
-												description: 'The SQL itself',
+									new GraphQLNonNull(
+										new GraphQLInputObjectType({
+											name: 'MutationCreateEventSqls',
+											fields: {
+												sql: {
+													type: new GraphQLNonNull(GraphQLNonEmptyString),
+													description: 'The SQL itself',
+												},
+												binds: {
+													type: new GraphQLList(new GraphQLNonNull(GraphQLJSON)),
+													description: 'Any binding values to the sql supplied',
+												},
 											},
-											binds: {
-												type: new GraphQLList(new GraphQLNonNull(GraphQLJSON)),
-												description: 'Any binding values to the sql supplied',
-											},
-										},
-									}),
+										}),
+									),
 								),
 							),
 						},
