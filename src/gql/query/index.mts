@@ -1,6 +1,6 @@
-import { GraphQLError, GraphQLNonNull, GraphQLObjectType, type GraphQLResolveInfo } from 'graphql';
+import { GraphQLError, GraphQLID, GraphQLNonNull, GraphQLObjectType, type GraphQLResolveInfo } from 'graphql';
 import { GraphQLJSON, GraphQLNonEmptyString } from 'graphql-scalars';
-import type { DefinedEvent } from '../../do/types.mjs';
+import type { DefinedEvent, EventDetail } from '../../do/types.mjs';
 import { BaseSchema } from '../../shared/baseSchema.mjs';
 import type { GqlContext } from '../../types.mjs';
 
@@ -9,25 +9,57 @@ export class QueryIndex extends BaseSchema {
 		this.queryType = new GraphQLObjectType({
 			name: 'Query',
 			fields: {
-				getEvents: {
+				getEvent: {
 					type: GraphQLJSON,
-					resolve: async (obj: {}, args: {}, context: GqlContext, info: GraphQLResolveInfo) => {
-						const response = await context.D1_EVENT_SCHEDULER.get(context.D1_EVENT_SCHEDULER.idFromName('d1.event')).fetch(
-							new Request(new URL('https://d1.event'), {
-								// @ts-expect-error
-								cf: context.request.cf,
-							}),
-						);
+					args: {
+						id: { type: GraphQLID },
+						name: { type: GraphQLNonEmptyString },
+					},
+					resolve: async (
+						obj: {},
+						args: {
+							id?: string;
+							name?: string;
+						},
+						context: GqlContext,
+						info: GraphQLResolveInfo,
+					) => {
+						if (args.id || args.name) {
+							const id = args.id ?? context.D1_EVENT_SCHEDULER.idFromName(args.name!).toString();
 
-						try {
-							const json = await response.json<DefinedEvent[]>();
-							if (json.length > 0) {
-								return json;
-							} else {
-								return null;
+							const response = await context.D1_EVENT_SCHEDULER.get(context.D1_EVENT_SCHEDULER.idFromString(id)).fetch(
+								new Request(new URL(`/${id}`, 'https://d1.event'), {
+									// @ts-expect-error
+									cf: context.request.cf,
+								}),
+							);
+
+							try {
+								return {
+									EVENT_ID: id,
+									...(await response.json<EventDetail>()),
+								};
+							} catch (error) {
+								throw new GraphQLError((error as Error).message);
 							}
-						} catch (error) {
-							throw new GraphQLError((error as Error).message);
+						} else {
+							const response = await context.D1_EVENT_SCHEDULER.get(context.D1_EVENT_SCHEDULER.idFromName('d1.event')).fetch(
+								new Request(new URL('https://d1.event'), {
+									// @ts-expect-error
+									cf: context.request.cf,
+								}),
+							);
+
+							try {
+								const json = await response.json<DefinedEvent[]>();
+								if (json.length > 0) {
+									return json;
+								} else {
+									return null;
+								}
+							} catch (error) {
+								throw new GraphQLError((error as Error).message);
+							}
 						}
 					},
 				},
