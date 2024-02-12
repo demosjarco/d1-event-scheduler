@@ -52,7 +52,8 @@ export class D1EventScheduler {
 				throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
 			}
 		});
-		app.post(
+		app.on(
+			['POST', 'PUT'],
 			eventPathWithRegex,
 			zValidator(
 				'json',
@@ -64,23 +65,6 @@ export class D1EventScheduler {
 				if (c.req.param('id') === this.state.id.toString()) {
 					const { body } = c.req.valid('json');
 					return c.json({ hello: 'world' });
-				} else {
-					throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
-				}
-			},
-		);
-		app.put(
-			eventPathWithRegex,
-			zValidator(
-				'json',
-				z.object({
-					body: z.string(),
-				}),
-			),
-			(c) => {
-				if (c.req.param('id') === this.state.id.toString()) {
-					const { body } = c.req.valid('json');
-					return c.text('Hello world');
 				} else {
 					throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
 				}
