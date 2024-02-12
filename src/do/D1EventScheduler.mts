@@ -105,8 +105,27 @@ export class D1EventScheduler {
 		app.delete(eventPathWithRegex, async (c) => {
 			if (c.req.param('id') === this.state.id.toString()) {
 				try {
-					await this.state.storage.deleteAll();
-					return c.text('Deleted event');
+					await Promise.all([
+						this.state.storage.deleteAll(),
+						// this.state.storage.deleteAlarm(),
+						this.env.D1_EVENT_SCHEDULER.get(this.env.D1_EVENT_SCHEDULER.idFromName('d1.event'))
+							.fetch(
+								new Request(new URL('https://d1.event'), {
+									method: 'DELETE',
+									headers: {
+										'Content-Type': 'application/json',
+									},
+									// @ts-expect-error
+									cf: c.req.raw.cf,
+									body: JSON.stringify({
+										id: this.state.id.toString(),
+									} as DefinedEvent),
+								}),
+							)
+							.then((response) => console.debug(response.status, response.statusText)),
+					]);
+
+					return c.json({});
 				} catch (error) {
 					throw new HTTPException(500, { message: (error as Error).message });
 				}
