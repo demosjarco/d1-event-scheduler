@@ -29,7 +29,7 @@ export class MutationIndex extends BaseSchema {
 								new GraphQLList(
 									new GraphQLNonNull(
 										new GraphQLInputObjectType({
-											name: 'MutationCreateEventSqls',
+											name: 'MutationCreateOrReplaceEventSqls',
 											fields: {
 												sql: {
 													type: new GraphQLNonNull(GraphQLNonEmptyString),
@@ -48,7 +48,7 @@ export class MutationIndex extends BaseSchema {
 						[EventDetailsKeys.EVENT_TYPE]: {
 							type: new GraphQLNonNull(
 								new GraphQLEnumType({
-									name: 'MutationCreateEventType',
+									name: 'MutationCreateOrReplaceEventType',
 									values: {
 										oneTime: {
 											value: 'ONE TIME',
@@ -70,7 +70,7 @@ export class MutationIndex extends BaseSchema {
 						},
 						[EventDetailsKeys.INTERVAL_FIELD]: {
 							type: new GraphQLEnumType({
-								name: 'MutationCreateEventIntervalField',
+								name: 'MutationCreateOrReplaceEventIntervalField',
 								values: {
 									milliseconds: {
 										value: 'MILLISECONDS',
