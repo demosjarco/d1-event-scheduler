@@ -55,6 +55,7 @@ MySQL like Event Scheduler, but for Cloudflare D1
 
 -   REST is auto generated with [`sofa-api`](https://the-guild.dev/graphql/sofa-api) from GraphQL schemas
     -   REST API is still subject to the same GraphQL schema and validation
+-   GraphQL is setup to support [`@defer`](https://graphql.org/blog/2020-12-08-improving-latency-with-defer-and-stream-directives/) (useful if you have a long list of DO events)
 -   GraphQL and REST are both behind `hono`.
 -   Each DO fetch handler is behind `hono`
 -   Internal DO fetch handler runs on `https://d1.event/:id?` url scheme
