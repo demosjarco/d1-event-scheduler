@@ -136,23 +136,27 @@ export class MutationIndex extends BaseSchema {
 					},
 					type: GraphQLJSON,
 					resolve: async (obj: {}, args: EventDetailGQL, context: GqlContext, info: GraphQLResolveInfo) => {
-						const doId = context.D1_EVENT_SCHEDULER.idFromName(args.eventName);
-						const response = await context.D1_EVENT_SCHEDULER.get(doId).fetch(
-							new Request(new URL(doId.toString(), 'https://d1.event'), {
-								method: 'POST',
-								headers: {
-									'Content-Type': 'application/json',
-								},
-								// @ts-expect-error
-								cf: context.request.cf,
-								body: JSON.stringify(args),
-							}),
-						);
+						if (args.sqls.length > 0) {
+							const doId = context.D1_EVENT_SCHEDULER.idFromName(args.eventName);
+							const response = await context.D1_EVENT_SCHEDULER.get(doId).fetch(
+								new Request(new URL(doId.toString(), 'https://d1.event'), {
+									method: 'POST',
+									headers: {
+										'Content-Type': 'application/json',
+									},
+									// @ts-expect-error
+									cf: context.request.cf,
+									body: JSON.stringify(args),
+								}),
+							);
 
-						try {
-							return await response.json<EventDetail>();
-						} catch (error) {
-							throw new GraphQLError((error as Error).message);
+							try {
+								return await response.json<EventDetail>();
+							} catch (error) {
+								throw new GraphQLError((error as Error).message);
+							}
+						} else {
+							throw new GraphQLError('No `sqls` provided');
 						}
 					},
 				},
