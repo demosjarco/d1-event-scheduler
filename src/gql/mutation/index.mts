@@ -9,7 +9,8 @@ export class MutationIndex extends BaseSchema {
 		this.mutationType = new GraphQLObjectType({
 			name: 'Mutation',
 			fields: {
-				createEvent: {
+				createOrReplaceEvent: {
+					description: 'This will create or replace an existing event with the name',
 					args: {
 						[EventDetailsKeys.D1_BINDING]: {
 							type: new GraphQLNonNull(GraphQLID),
