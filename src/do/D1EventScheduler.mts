@@ -241,5 +241,13 @@ export class D1EventScheduler {
 		return newDate;
 	}
 
+	private static calculateNextInstance(intervalValue: number, intervalType: NonNullable<EventDetail[EventDetailsKeys.INTERVAL_FIELD]>, startDate: Date, currentDate: Date = new Date()): Date {
+		let nextInstance = startDate;
+		while (nextInstance <= currentDate) {
+			nextInstance = this.addIntervalToDate(nextInstance, intervalValue, intervalType);
+		}
+		return nextInstance;
+	}
+
 	alarm(): ReturnType<DurableObject['alarm']> {}
 }
