@@ -4,6 +4,7 @@ export interface DefinedEvent {
 }
 
 export enum EventDetailsKeys {
+	EVENT_ID = 'EVENT_ID',
 	D1_BINDING = 'EVENT_SCHEMA',
 	EVENT_NAME = 'EVENT_NAME',
 	TIME_ZONE = 'TIME_ZONE',
@@ -24,6 +25,7 @@ export enum EventDetailsKeys {
 }
 
 export interface EventDetail {
+	[EventDetailsKeys.EVENT_ID]?: string;
 	[EventDetailsKeys.D1_BINDING]: string;
 	[EventDetailsKeys.EVENT_NAME]: string;
 	[EventDetailsKeys.TIME_ZONE]: NonNullable<NonNullable<Parameters<Date['toLocaleString']>[1]>['timeZone']>;
