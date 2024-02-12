@@ -64,7 +64,7 @@ export class D1EventScheduler {
 				if (index !== -1) existing.splice(index, 1);
 				existing.push(incoming);
 
-				await this.state.storage.put<DefinedEvent[]>('events', Array.from(existing));
+				this.state.waitUntil(this.state.storage.put<DefinedEvent[]>('events', Array.from(existing)));
 
 				return c.json([incoming]);
 			} catch (error) {
@@ -80,7 +80,7 @@ export class D1EventScheduler {
 				if (index > -1) {
 					existing.splice(index, 1);
 
-					await this.state.storage.put<DefinedEvent[]>('events', Array.from(existing));
+					this.state.waitUntil(this.state.storage.put<DefinedEvent[]>('events', Array.from(existing)));
 
 					return c.json([]);
 				} else {
@@ -143,24 +143,26 @@ export class D1EventScheduler {
 						[EventDetailsKeys.LAST_ALTERED]: new Date(),
 					};
 
-					await Promise.all([
-						this.state.storage.put<any>(saving),
-						this.nextAlarmRun.then((nextAlarm) => this.state.storage.setAlarm(nextAlarm.getTime())),
-						this.env.D1_EVENT_SCHEDULER.get(this.env.D1_EVENT_SCHEDULER.idFromName('d1.event')).fetch(
-							new Request(new URL('https://d1.event'), {
-								method: 'PATCH',
-								headers: {
-									'Content-Type': 'application/json',
-								},
-								// @ts-expect-error
-								cf: c.req.raw.cf,
-								body: JSON.stringify({
-									id: this.state.id.toString(),
-									name: this.state.id.name ?? saving[EventDetailsKeys.EVENT_NAME],
-								} as DefinedEvent),
-							}),
-						),
-					]);
+					this.state.waitUntil(
+						Promise.all([
+							this.state.storage.put<any>(saving),
+							this.nextAlarmRun.then((nextAlarm) => this.state.storage.setAlarm(nextAlarm.getTime())),
+							this.env.D1_EVENT_SCHEDULER.get(this.env.D1_EVENT_SCHEDULER.idFromName('d1.event')).fetch(
+								new Request(new URL('https://d1.event'), {
+									method: 'PATCH',
+									headers: {
+										'Content-Type': 'application/json',
+									},
+									// @ts-expect-error
+									cf: c.req.raw.cf,
+									body: JSON.stringify({
+										id: this.state.id.toString(),
+										name: this.state.id.name ?? saving[EventDetailsKeys.EVENT_NAME],
+									} as DefinedEvent),
+								}),
+							),
+						]),
+					);
 
 					return c.json({
 						...saving,
@@ -183,29 +185,31 @@ export class D1EventScheduler {
 		app.delete(eventPathWithRegex, async (c) => {
 			if (c.req.param('id') === this.state.id.toString()) {
 				try {
-					await Promise.all([
-						this.state.storage.deleteAll(),
-						// this.state.storage.deleteAlarm(),
-						this.env.D1_EVENT_SCHEDULER.get(this.env.D1_EVENT_SCHEDULER.idFromName('d1.event'))
-							.fetch(
-								new Request(new URL('https://d1.event'), {
-									method: 'DELETE',
-									headers: {
-										'Content-Type': 'application/json',
-									},
-									// @ts-expect-error
-									cf: c.req.raw.cf,
-									body: JSON.stringify({
-										id: this.state.id.toString(),
-									} as DefinedEvent),
+					this.state.waitUntil(
+						Promise.all([
+							this.state.storage.deleteAll(),
+							// this.state.storage.deleteAlarm(),
+							this.env.D1_EVENT_SCHEDULER.get(this.env.D1_EVENT_SCHEDULER.idFromName('d1.event'))
+								.fetch(
+									new Request(new URL('https://d1.event'), {
+										method: 'DELETE',
+										headers: {
+											'Content-Type': 'application/json',
+										},
+										// @ts-expect-error
+										cf: c.req.raw.cf,
+										body: JSON.stringify({
+											id: this.state.id.toString(),
+										} as DefinedEvent),
+									}),
+								)
+								.then((response) => {
+									if (!response.ok) {
+										throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+									}
 								}),
-							)
-							.then((response) => {
-								if (!response.ok) {
-									throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-								}
-							}),
-					]);
+						]),
+					);
 
 					return c.json({});
 				} catch (error) {
