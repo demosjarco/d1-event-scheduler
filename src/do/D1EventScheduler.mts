@@ -304,5 +304,35 @@ export class D1EventScheduler {
 		});
 	}
 
-	alarm(): ReturnType<DurableObject['alarm']> {}
+	// Needs `Awaited<>` or else it stacks `Promise<>`s
+	async alarm() {
+		return new Promise<Awaited<ReturnType<NonNullable<DurableObject['alarm']>>>>((mainResolve, mainReject) => {
+			/**
+			 * @todo SQL stuff
+			 */
+
+			this.nextAlarmRun
+				.then((nextAlarmDate) => this.state.storage.setAlarm(nextAlarmDate.getTime()))
+				.catch(() =>
+					this.state.storage
+						.get<EventDetail[EventDetailsKeys.AUTO_DELETE]>(EventDetailsKeys.AUTO_DELETE)
+						.then((autoDelete) => {
+							if (autoDelete) {
+								this.env.D1_EVENT_SCHEDULER.get(this.state.id)
+									.fetch(
+										new Request(new URL(`/${this.state.id.toString()}`, 'https://d1.event'), {
+											// @ts-expect-error
+											cf: c.req.raw.cf,
+										}),
+									)
+									.then((response) => (response.ok ? mainResolve : mainReject(response.status)))
+									.catch(mainReject);
+							} else {
+								mainResolve();
+							}
+						})
+						.catch(mainReject),
+				);
+		});
+	}
 }
