@@ -2,6 +2,8 @@
 
 MySQL like Event Scheduler, but for Cloudflare D1
 
+For status on the project see [Projects](/projects) tab at the top of the repo.
+
 ## Features
 
 -   Every scheduled event is stored as a DO object and is triggered using DO's [Alarms API](https://developers.cloudflare.com/durable-objects/api/alarms/)
