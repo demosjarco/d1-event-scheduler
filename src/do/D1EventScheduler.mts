@@ -1,3 +1,4 @@
+import { parseExpression } from 'cron-parser';
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { timing } from 'hono/timing';
@@ -247,6 +248,39 @@ export class D1EventScheduler {
 			nextInstance = this.addIntervalToDate(nextInstance, intervalValue, intervalType);
 		}
 		return nextInstance;
+	}
+
+	private get nextAlarmRun() {
+		return new Promise<Date>((resolve, reject) => {
+			this.state.storage
+				.getAlarm()
+				.then(async (existingAlarm) => {
+					if (existingAlarm !== null) {
+						resolve(new Date(existingAlarm));
+					} else {
+						this.state.storage
+							.get<EventDetail[EventDetailsKeys.CRON]>(EventDetailsKeys.CRON)
+							.then((cronString) => {
+								if (cronString) {
+									resolve(parseExpression(cronString).next().toDate());
+								} else {
+									this.state.storage
+										.get([EventDetailsKeys.INTERVAL_VALUE, EventDetailsKeys.INTERVAL_FIELD, EventDetailsKeys.STARTS])
+										.then((test) => {
+											if (test.size === 3) {
+												resolve(D1EventScheduler.calculateNextInstance(test.get(EventDetailsKeys.INTERVAL_VALUE) as number, test.get(EventDetailsKeys.INTERVAL_FIELD) as NonNullable<EventDetail[EventDetailsKeys.INTERVAL_FIELD]>, test.get(EventDetailsKeys.STARTS) as Date));
+											} else {
+												reject('Missing cron & interval');
+											}
+										})
+										.catch(reject);
+								}
+							})
+							.catch(reject);
+					}
+				})
+				.catch(reject);
+		});
 	}
 
 	alarm(): ReturnType<DurableObject['alarm']> {}
