@@ -341,8 +341,8 @@ export class D1EventScheduler {
 					}
 				})
 				.catch(reject),
-		).finally(
-			() =>
+		).finally(() =>
+			this.state.waitUntil(
 				new Promise<void>((resolve, reject) =>
 					this.nextAlarmRun
 						.then((nextAlarmDate) => this.state.storage.setAlarm(nextAlarmDate.getTime()))
@@ -367,6 +367,7 @@ export class D1EventScheduler {
 								.catch(reject),
 						),
 				),
+			),
 		);
 	}
 }
