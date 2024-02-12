@@ -1,5 +1,4 @@
 import { useDeferStream } from '@graphql-yoga/plugin-defer-stream';
-import { useGraphQLSSE } from '@graphql-yoga/plugin-graphql-sse';
 import { createYoga } from 'graphql-yoga';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
@@ -51,15 +50,9 @@ app.on(validApiMethods, '/graphql/*', async (c) =>
 		landingPage: false,
 		graphiql: {
 			title: 'D1 Event Scheduler',
-			subscriptionsProtocol: 'GRAPHQL_SSE',
 		},
 		schema: await new ApiSchema({ c }).schema(),
-		plugins: [
-			useDeferStream(),
-			useGraphQLSSE({
-				endpoint: '/graphql/stream',
-			}),
-		],
+		plugins: [useDeferStream()],
 	}).fetch(c.req.raw, c.env, c.executionCtx),
 );
 app.on(validApiMethods, '/*', async (c) =>

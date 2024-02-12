@@ -7,7 +7,6 @@ export abstract class BaseSchema extends Base {
 	protected argsType: GraphQLFieldConfigArgumentMap;
 	protected queryType: GraphQLObjectType | undefined;
 	protected mutationType: GraphQLObjectType | undefined;
-	protected subscriptionType: GraphQLObjectType | undefined;
 
 	// Mutations
 	protected async createMutationHelperTypes(): Promise<void> {
@@ -22,14 +21,6 @@ export abstract class BaseSchema extends Base {
 		return;
 	}
 	protected async createQueryType(): Promise<void> {
-		return;
-	}
-
-	// Subscriptions
-	protected async createSubscriptionHelperTypes(): Promise<void> {
-		return;
-	}
-	protected async createSubscriptionType(): Promise<void> {
 		return;
 	}
 
@@ -49,13 +40,6 @@ export abstract class BaseSchema extends Base {
 		await this.createQueryType();
 
 		return this.queryType;
-	}
-
-	public async gqlSubscriptionType(): Promise<GraphQLObjectType | undefined> {
-		await this.createSubscriptionHelperTypes();
-		await this.createSubscriptionType();
-
-		return this.subscriptionType;
 	}
 
 	// Resolving queries
