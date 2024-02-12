@@ -1,5 +1,5 @@
 import { GraphQLBoolean, GraphQLEnumType, GraphQLError, GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, type GraphQLResolveInfo } from 'graphql';
-import { GraphQLDateTimeISO, GraphQLJSON, GraphQLNonEmptyString, GraphQLPositiveInt, GraphQLTimeZone } from 'graphql-scalars';
+import { GraphQLDateTimeISO, GraphQLJSON, GraphQLJSONObject, GraphQLNonEmptyString, GraphQLPositiveInt, GraphQLTimeZone } from 'graphql-scalars';
 import { EventDetailsKeys, type EventDetailGQL } from '../../do/types.mjs';
 import { BaseSchema } from '../../shared/baseSchema.mjs';
 import type { GqlContext } from '../../types.mjs';
@@ -152,6 +152,42 @@ export class MutationIndex extends BaseSchema {
 							}
 						} else {
 							throw new GraphQLError('No `sqls` provided');
+						}
+					},
+				},
+				deleteEvent: {
+					args: {
+						id: { type: GraphQLID },
+						name: { type: GraphQLNonEmptyString },
+					},
+					type: new GraphQLNonNull(GraphQLJSONObject),
+					resolve: async (
+						obj: {},
+						args: {
+							id?: string;
+							name?: string;
+						},
+						context: GqlContext,
+						info: GraphQLResolveInfo,
+					) => {
+						if (args.id || args.name) {
+							const id = args.id ?? context.D1_EVENT_SCHEDULER.idFromName(args.name!).toString();
+
+							const response = await context.D1_EVENT_SCHEDULER.get(context.D1_EVENT_SCHEDULER.idFromString(id)).fetch(
+								new Request(new URL(`/${id}`, 'https://d1.event'), {
+									method: 'DELETE',
+									// @ts-expect-error
+									cf: context.request.cf,
+								}),
+							);
+
+							try {
+								return await response.json();
+							} catch (error) {
+								throw new GraphQLError((error as Error).message);
+							}
+						} else {
+							throw new GraphQLError('You must provide either id or name');
 						}
 					},
 				},
