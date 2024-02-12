@@ -63,4 +63,4 @@ For status on the project see Projects tab at the top of the repo.
 -   Internal DO fetch handler runs on `https://d1.event/:id?` url scheme
     -   Main DO object responds on `/` while every event DO responds on `/:id`
 -   The API has [`csrf`](https://hono.dev/middleware/builtin/csrf), [`cors`](https://hono.dev/middleware/builtin/cors), [`secureHeaders`](https://hono.dev/middleware/builtin/secure-headers), [`etag`](https://hono.dev/middleware/builtin/etag), and [`timing`](https://hono.dev/middleware/builtin/timing) enabled
-    -   Comming soon: The duration of all internal tasks will be reported via timing header (visible in Network tools of browser)
+    -   Coming soon: The duration of all internal tasks will be reported via timing header (visible in Network tools of browser)
