@@ -26,45 +26,74 @@ export class D1EventScheduler {
 			} catch (error) {
 				throw new HTTPException(500, { message: (error as Error).message });
 			}
+		}).post(
+			zValidator(
+				'json',
+				z.object({
+					body: z.string(),
+				}),
+			),
+			(c) => {
+				const { body } = c.req.valid('json');
+				return c.text('Hello world');
+			},
+		);
+
+		const eventPathWithRegex = '/:id{[0-9a-fA-F]+}';
+		app.get(eventPathWithRegex, async (c) => {
+			if (c.req.param('id') === this.state.id.toString()) {
+				const keys = Object.keys(EventDetailsKeys);
+				const eventInfo = await Promise.all(keys.map((key) => this.state.storage.get(key, { allowConcurrency: true })));
+
+				return c.json(
+					keys.reduce(
+						(acc, key, index) => {
+							acc[key] = eventInfo[index];
+							return acc;
+						},
+						{} as { [key: string]: unknown },
+					),
+				);
+			} else {
+				throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
+			}
 		});
-
-		app.get('/:id{[0-9a-fA-F]+}', async (c) => {
-			const keys = Object.keys(EventDetailsKeys);
-			const eventInfo = await Promise.all(keys.map((key) => this.state.storage.get(key, { allowConcurrency: true })));
-
-			return c.json(
-				keys.reduce(
-					(acc, key, index) => {
-						acc[key] = eventInfo[index];
-						return acc;
-					},
-					{} as { [key: string]: unknown },
-				),
-			);
-		})
-			.put(
-				zValidator(
-					'json',
-					z.object({
-						body: z.string(),
-					}),
-				),
-				(c) => {
+		app.put(
+			eventPathWithRegex,
+			zValidator(
+				'json',
+				z.object({
+					body: z.string(),
+				}),
+			),
+			(c) => {
+				if (c.req.param('id') === this.state.id.toString()) {
 					const { body } = c.req.valid('json');
 					return c.text('Hello world');
-				},
-			)
-			.patch((c) => {
+				} else {
+					throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
+				}
+			},
+		);
+		app.patch(eventPathWithRegex, async (c) => {
+			if (c.req.param('id') === this.state.id.toString()) {
 				return c.text('Hello world');
-			})
-			.delete(async (c) => {
+			} else {
+				throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
+			}
+		});
+		app.delete(eventPathWithRegex, async (c) => {
+			if (c.req.param('id') === this.state.id.toString()) {
 				try {
 					await this.state.storage.deleteAll();
 					return c.text('Deleted event');
 				} catch (error) {
 					throw new HTTPException(500, { message: (error as Error).message });
 				}
-			});
+			} else {
+				throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
+			}
+		});
 
 		return app.fetch(request, this.env, { waitUntil: this.state.waitUntil, passThroughOnException() {} });
 	}
