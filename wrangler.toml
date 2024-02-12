@@ -3,8 +3,12 @@ main = "src/index.ts"
 compatibility_date = "2024-01-29"
 compatibility_flags = ["nodejs_compat"]
 workers_dev = false
+# route = { pattern = "event-scheduler.example.com", custom_domain = true }
 minify = true
 durable_objects.bindings = [
     { name = "D1_EVENT_SCHEDULER", class_name = "D1EventScheduler" },
 ]
 migrations = [{ tag = "v1", new_classes = ["D1EventScheduler"] }]
+d1_databases = [
+    # { binding = "DB", database_name = "EXAMPLE", database_id = "example-db-id-goes-here", preview_database_id = "example-db-id-goes-here" },
+]
