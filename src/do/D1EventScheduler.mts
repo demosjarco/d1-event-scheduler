@@ -139,6 +139,7 @@ export class D1EventScheduler {
 
 					await Promise.all([
 						this.state.storage.put<any>(saving),
+						this.nextAlarmRun.then((nextAlarm) => this.state.storage.setAlarm(nextAlarm.getTime())),
 						this.env.D1_EVENT_SCHEDULER.get(this.env.D1_EVENT_SCHEDULER.idFromName('d1.event')).fetch(
 							new Request(new URL('https://d1.event'), {
 								method: 'PATCH',
