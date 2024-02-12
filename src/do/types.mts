@@ -6,7 +6,6 @@ export interface DefinedEvent {
 export enum EventDetailsKeys {
 	D1_BINDING = 'EVENT_SCHEMA',
 	EVENT_NAME = 'EVENT_NAME',
-	DEFINER = 'DEFINER',
 	TIME_ZONE = 'TIME_ZONE',
 	EVENT_DEFINITION = 'EVENT_DEFINITION',
 	EVENT_TYPE = 'EVENT_TYPE',
@@ -27,7 +26,6 @@ export enum EventDetailsKeys {
 export interface EventDetail {
 	[EventDetailsKeys.D1_BINDING]: string;
 	[EventDetailsKeys.EVENT_NAME]: string;
-	[EventDetailsKeys.DEFINER]: string;
 	[EventDetailsKeys.TIME_ZONE]: NonNullable<NonNullable<Parameters<Date['toLocaleString']>[1]>['timeZone']>;
 	[EventDetailsKeys.EVENT_DEFINITION]: {
 		sql: Parameters<D1Database['prepare']>[0];
