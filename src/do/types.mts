@@ -51,3 +51,20 @@ export interface EventDetail {
 	[EventDetailsKeys.LAST_EXECUTED]?: Date;
 	[EventDetailsKeys.EVENT_COMMENT]?: string;
 }
+
+export interface EventDetailGQL {
+	d1Binding: EventDetail[EventDetailsKeys.D1_BINDING];
+	eventName: EventDetail[EventDetailsKeys.EVENT_NAME];
+	timeZone: EventDetail[EventDetailsKeys.TIME_ZONE];
+	sqls: EventDetail[EventDetailsKeys.EVENT_DEFINITION];
+	type: EventDetail[EventDetailsKeys.EVENT_TYPE];
+	executeAt?: EventDetail[EventDetailsKeys.EXECUTE_AT];
+	intervalValue?: EventDetail[EventDetailsKeys.INTERVAL_VALUE];
+	intervalField?: EventDetail[EventDetailsKeys.INTERVAL_FIELD];
+	cron?: EventDetail[EventDetailsKeys.CRON];
+	starts: EventDetail[EventDetailsKeys.STARTS];
+	ends?: EventDetail[EventDetailsKeys.ENDS];
+	enabled: EventDetail[EventDetailsKeys.ENABLED];
+	autoDelete: EventDetail[EventDetailsKeys.AUTO_DELETE];
+	comment?: EventDetail[EventDetailsKeys.EVENT_COMMENT];
+}

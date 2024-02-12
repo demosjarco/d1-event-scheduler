@@ -1,6 +1,6 @@
 import { GraphQLBoolean, GraphQLEnumType, GraphQLError, GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, type GraphQLResolveInfo } from 'graphql';
 import { GraphQLDateTimeISO, GraphQLJSON, GraphQLNonEmptyString, GraphQLPositiveInt, GraphQLTimeZone } from 'graphql-scalars';
-import type { EventDetail, EventDetailsKeys } from '../../do/types.mjs';
+import type { EventDetail, EventDetailGQL } from '../../do/types.mjs';
 import { BaseSchema } from '../../shared/baseSchema.mjs';
 import type { GqlContext } from '../../types.mjs';
 
@@ -133,27 +133,7 @@ export class MutationIndex extends BaseSchema {
 						},
 					},
 					type: GraphQLJSON,
-					resolve: async (
-						obj: {},
-						args: {
-							d1Binding: EventDetail[EventDetailsKeys.D1_BINDING];
-							eventName: EventDetail[EventDetailsKeys.EVENT_NAME];
-							timeZone: EventDetail[EventDetailsKeys.TIME_ZONE];
-							sqls: EventDetail[EventDetailsKeys.EVENT_DEFINITION];
-							type: EventDetail[EventDetailsKeys.EVENT_TYPE];
-							executeAt?: EventDetail[EventDetailsKeys.EXECUTE_AT];
-							intervalValue?: EventDetail[EventDetailsKeys.INTERVAL_VALUE];
-							intervalField?: EventDetail[EventDetailsKeys.INTERVAL_FIELD];
-							cron?: EventDetail[EventDetailsKeys.CRON];
-							starts: EventDetail[EventDetailsKeys.STARTS];
-							ends?: EventDetail[EventDetailsKeys.ENDS];
-							enabled: EventDetail[EventDetailsKeys.ENABLED];
-							autoDelete: EventDetail[EventDetailsKeys.AUTO_DELETE];
-							comment?: EventDetail[EventDetailsKeys.EVENT_COMMENT];
-						},
-						context: GqlContext,
-						info: GraphQLResolveInfo,
-					) => {
+					resolve: async (obj: {}, args: EventDetailGQL, context: GqlContext, info: GraphQLResolveInfo) => {
 						const doId = context.D1_EVENT_SCHEDULER.idFromName(args.eventName);
 						const response = await context.D1_EVENT_SCHEDULER.get(doId).fetch(
 							new Request(new URL(doId.toString(), 'https://d1.event'), {
