@@ -1,5 +1,6 @@
-import { GraphQLNonNull, GraphQLObjectType, type GraphQLResolveInfo } from 'graphql';
+import { GraphQLError, GraphQLNonNull, GraphQLObjectType, type GraphQLResolveInfo } from 'graphql';
 import { GraphQLJSON, GraphQLNonEmptyString } from 'graphql-scalars';
+import type { DefinedEvent } from '../../do/types.mjs';
 import { BaseSchema } from '../../shared/baseSchema.mjs';
 import type { GqlContext } from '../../types.mjs';
 
@@ -18,12 +19,16 @@ export class QueryIndex extends BaseSchema {
 							}),
 						);
 
-						return {
-							headers: Object.fromEntries(response.headers.entries()),
-							// @ts-expect-error
-							cf: response.cf ?? context.request.cf,
-							body: await response.text(),
-						};
+						try {
+							const json = await response.json<DefinedEvent[]>();
+							if (json.length > 0) {
+								return json;
+							} else {
+								return null;
+							}
+						} catch (error) {
+							throw new GraphQLError((error as Error).message);
+						}
 					},
 				},
 				hello: {
