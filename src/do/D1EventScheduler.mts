@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { timing } from 'hono/timing';
 import type { EnvVars } from '../types.mjs';
-import { EventDetailsKeys, type DefinedEvent, type EventDetailGQL } from './types.mjs';
+import { EventDetailsKeys, type DefinedEvent, type EventDetail, type EventDetailGQL } from './types.mjs';
 
 export class D1EventScheduler {
 	private state: DurableObjectState;
@@ -21,6 +21,41 @@ export class D1EventScheduler {
 		app.get('/', async (c) => {
 			try {
 				return c.json((await this.state.storage.get<DefinedEvent[]>('events', { allowConcurrency: true })) ?? []);
+			} catch (error) {
+				throw new HTTPException(500, { message: (error as Error).message });
+			}
+		});
+		app.patch('/', async (c) => {
+			try {
+				const incoming = await c.req.json<DefinedEvent>();
+
+				const existing = (await this.state.storage.get<DefinedEvent[]>('events', { allowConcurrency: true })) ?? [];
+				const index = existing.findIndex((event) => event.id === incoming.id);
+				if (index !== -1) existing.splice(index, 1);
+				existing.push(incoming);
+
+				await this.state.storage.put<DefinedEvent[]>('events', Array.from(existing));
+
+				return c.json([incoming]);
+			} catch (error) {
+				throw new HTTPException(500, { message: (error as Error).message });
+			}
+		});
+		app.delete('/', async (c) => {
+			try {
+				const incoming = await c.req.json<DefinedEvent>();
+
+				const existing = (await this.state.storage.get<DefinedEvent[]>('events', { allowConcurrency: true })) ?? [];
+				const index = existing.findIndex((event) => event.id === incoming.id);
+				if (index !== -1) {
+					existing.splice(index, 1);
+
+					await this.state.storage.put<DefinedEvent[]>('events', Array.from(existing));
+
+					return c.json([]);
+				} else {
+					throw new HTTPException(404, { message: `${incoming.name} (${incoming.id}) not found` });
+				}
 			} catch (error) {
 				throw new HTTPException(500, { message: (error as Error).message });
 			}
