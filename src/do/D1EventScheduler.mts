@@ -304,8 +304,8 @@ export class D1EventScheduler {
 		});
 	}
 
-	// Needs `Awaited<>` or else it stacks `Promise<>`s
 	async alarm() {
+		// Needs `Awaited<>` or else it stacks `Promise<>`s
 		return new Promise<Awaited<ReturnType<NonNullable<DurableObject['alarm']>>>>((mainResolve, mainReject) => {
 			/**
 			 * @todo SQL stuff
