@@ -1,10 +1,8 @@
-import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import { timing } from 'hono/timing';
-import { z } from 'zod';
 import type { EnvVars } from '../types.mjs';
-import { EventDetailsKeys, type DefinedEvent } from './types.mjs';
+import { EventDetailsKeys, type DefinedEvent, type EventDetailGQL } from './types.mjs';
 
 export class D1EventScheduler {
 	private state: DurableObjectState;
@@ -52,24 +50,15 @@ export class D1EventScheduler {
 				throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
 			}
 		});
-		app.on(
-			['POST', 'PUT'],
-			eventPathWithRegex,
-			zValidator(
-				'json',
-				z.object({
-					body: z.string(),
-				}),
-			),
-			(c) => {
-				if (c.req.param('id') === this.state.id.toString()) {
-					const { body } = c.req.valid('json');
-					return c.json({ hello: 'world' });
-				} else {
-					throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
-				}
-			},
-		);
+		app.on(['POST', 'PUT'], eventPathWithRegex, async (c) => {
+			if (c.req.param('id') === this.state.id.toString()) {
+				const incoming = await c.req.json<EventDetailGQL>();
+
+				return c.json(incoming);
+			} else {
+				throw new HTTPException(503, { message: `Requested ${c.req.param('id')} but ${this.state.id.toString()} responded` });
+			}
+		});
 		app.patch(eventPathWithRegex, async (c) => {
 			if (c.req.param('id') === this.state.id.toString()) {
 				return c.text('Hello world');
