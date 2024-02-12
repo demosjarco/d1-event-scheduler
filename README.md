@@ -2,7 +2,7 @@
 
 MySQL like Event Scheduler, but for Cloudflare D1
 
-For status on the project see [Projects](/projects) tab at the top of the repo.
+For status on the project see Projects tab at the top of the repo.
 
 ## Features
 
