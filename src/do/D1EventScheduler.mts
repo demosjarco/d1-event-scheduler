@@ -127,8 +127,12 @@ export class D1EventScheduler {
 					}
 
 					const saving: EventDetail = {
-						[EventDetailsKeys.STARTS]: new Date(),
 						...incoming,
+						// Rewrite ISO 8601 strings as Date objects
+						[EventDetailsKeys.EXECUTE_AT]: incoming[EventDetailsKeys.EXECUTE_AT] ? new Date(incoming[EventDetailsKeys.EXECUTE_AT]) : undefined,
+						[EventDetailsKeys.STARTS]: incoming[EventDetailsKeys.STARTS] ? new Date(incoming[EventDetailsKeys.STARTS]) : new Date(),
+						[EventDetailsKeys.ENDS]: incoming[EventDetailsKeys.ENDS] ? new Date(incoming[EventDetailsKeys.ENDS]) : undefined,
+						// Generate
 						[EventDetailsKeys.CREATED]: new Date(),
 						[EventDetailsKeys.LAST_ALTERED]: new Date(),
 					};
