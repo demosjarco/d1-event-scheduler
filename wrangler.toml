@@ -1,7 +1,7 @@
 name = "d1-event-scheduler-dev"
 main = "src/index.ts"
 compatibility_date = "2024-03-04"
-compatibility_flags = ["nodejs_compat"]
+compatibility_flags = ["nodejs_compat", "fetcher_no_get_put_delete"]
 workers_dev = false
 # route = { pattern = "event-scheduler.example.com", custom_domain = true }
 minify = true
@@ -19,7 +19,7 @@ mode = "smart"
 [env.production]
 name = "d1-event-scheduler"
 compatibility_date = "2024-03-04"
-compatibility_flags = ["nodejs_compat"]
+compatibility_flags = ["nodejs_compat", "fetcher_no_get_put_delete"]
 route = { pattern = "event-scheduler.d1.demosjarco.dev", custom_domain = true }
 durable_objects.bindings = [
     { name = "D1_EVENT_SCHEDULER", class_name = "D1EventScheduler" },
