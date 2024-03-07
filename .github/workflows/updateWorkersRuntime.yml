@@ -1,0 +1,51 @@
+name: Update `workerd` runtime
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - '**/package*.json'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  update-toml:
+    if: startsWith(github.event.pull_request.head.ref, 'dependabot/npm_and_yarn/') && contains(github.event.pull_request.head.ref, '/cloudflare') && github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        with:
+          disable-sudo: true
+          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: lts/*
+          check-latest: true
+          cache: 'npm'
+      - run: npm ci
+      # No need to run `npm ci` in submodule
+      - name: Get minor version of workerd
+        id: get-version
+        run: |
+          VERSION=$(npm ls workerd --json | jq -r '.. | .workerd?.version? | select(.)')
+          MINOR_VERSION=${VERSION#*.}
+          MINOR_VERSION_HYPHEN="${MINOR_VERSION:0:4}-${MINOR_VERSION:4:2}-${MINOR_VERSION:6:2}"
+          echo "minor-version-hyphen=$MINOR_VERSION_HYPHEN" >> $GITHUB_OUTPUT
+      - name: Update `compatibility_date`
+        run: find . -maxdepth 2 -name "wrangler.toml" -print0 | xargs -0 sed -i "/compatibility_date = .*/s//compatibility_date = \"${{ steps.get-version.outputs.minor-version-hyphen }}\"/"
+      - name: Git Setup
+        run: |
+          git config user.name "dependabot[bot]"
+          git config user.email "dependabot[bot]@users.noreply.github.com"
+      - run: find . -maxdepth 2 -name "wrangler.toml" -print0 | xargs -0 git add
+      - run: git commit -m "Update compatibility_date in wrangler.toml file"
+      - run: git push
