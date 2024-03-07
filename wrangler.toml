@@ -26,7 +26,7 @@ durable_objects.bindings = [
 ]
 migrations = [{ tag = "v1", new_classes = ["D1EventScheduler"] }]
 d1_databases = [
-    # { binding = "DB", database_name = "EXAMPLE", database_id = "example-db-id-goes-here", preview_database_id = "example-db-id-goes-here" },
+    { binding = "FSDB", database_name = "fortnitestw", database_id = "13310a9d-4dca-4c17-9000-8d674933551c", preview_database_id = "53d69581-a8a7-46de-b140-281071cab2eb" },
 ]
 
 [env.production.placement]
