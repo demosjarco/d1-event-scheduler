@@ -1,6 +1,9 @@
 name: Auto Dependabot
 on: pull_request
 
+permissions:
+  contents: read
+
 jobs:
   enhance:
     runs-on: ubuntu-latest
