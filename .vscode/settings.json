@@ -15,5 +15,5 @@
 			"url": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json"
 		}
 	],
-	"github-actions.workflows.pinned.workflows": []
+	"github-actions.workflows.pinned.workflows": [".github/workflows/publish.yml"]
 }
