@@ -37,7 +37,7 @@ jobs:
           egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
       - uses: dependabot/fetch-metadata@c9c4182bf1b97f5224aee3906fd373f6b61b4526 # v1.6.0
         id: dependabot-metadata
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
       - run: gh pr checkout "${{ github.event.pull_request.html_url }}"
         env:
           GH_TOKEN: ${{ github.token }}
