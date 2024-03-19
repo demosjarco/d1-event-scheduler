@@ -37,8 +37,6 @@ updates:
       - dependency-name: 'sofa-api'
         versions:
           - '1.0.0'
-          - '0.18.1'
-          - '0.18.2'
     groups:
       graphql:
         patterns:
