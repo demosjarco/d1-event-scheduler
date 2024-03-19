@@ -8,26 +8,17 @@ updates:
   - package-ecosystem: 'devcontainers'
     directory: '/'
     schedule:
-      interval: 'weekly'
-      day: 'tuesday'
-      time: '09:00'
-      timezone: 'America/Phoenix'
+      interval: 'daily'
     open-pull-requests-limit: 999
   - package-ecosystem: 'docker'
     directory: '/'
     schedule:
-      interval: 'weekly'
-      day: 'tuesday'
-      time: '09:00'
-      timezone: 'America/Phoenix'
+      interval: 'daily'
     open-pull-requests-limit: 999
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: 'weekly'
-      day: 'tuesday'
-      time: '09:00'
-      timezone: 'America/Phoenix'
+      interval: 'daily'
     open-pull-requests-limit: 999
     groups:
       artifacts:
@@ -40,10 +31,7 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
-      interval: 'weekly'
-      day: 'tuesday'
-      time: '09:00'
-      timezone: 'America/Phoenix'
+      interval: 'daily'
     open-pull-requests-limit: 999
     ignore:
       - dependency-name: 'sofa-api'
