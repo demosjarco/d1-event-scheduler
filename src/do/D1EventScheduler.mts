@@ -5,7 +5,7 @@ import { endTime, startTime, timing } from 'hono/timing';
 import type { EnvVars } from '../types.mjs';
 import { EventDetailsKeys, type DefinedEvent, type EventDetail, type EventDetailGQL } from './types.mjs';
 
-export class D1EventScheduler {
+export class D1EventScheduler implements DurableObject {
 	private state: DurableObjectState;
 	private env: EnvVars;
 
