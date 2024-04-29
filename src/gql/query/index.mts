@@ -60,10 +60,6 @@ export class QueryIndex extends BaseSchema {
 						}
 					},
 				},
-				hello: {
-					type: new GraphQLNonNull(GraphQLNonEmptyString),
-					resolve: () => 'Hello World!',
-				},
 			},
 		});
 	}
