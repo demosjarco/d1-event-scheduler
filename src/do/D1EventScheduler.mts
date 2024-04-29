@@ -318,8 +318,8 @@ export class D1EventScheduler implements DurableObject {
 		// Update run time, but don't wait up on it
 		this.state.waitUntil(this.state.storage.put<EventDetail[EventDetailsKeys.LAST_EXECUTED]>(EventDetailsKeys.LAST_EXECUTED, new Date()));
 		// Needs `Awaited<>` or else it stacks `Promise<>`s
-		return new Promise<Awaited<ReturnType<NonNullable<DurableObject['alarm']>>>>((resolve, reject) =>
 			this.state.storage
+		return new Promise<void>((resolve, reject) =>
 				.get<EventDetail[EventDetailsKeys.D1_BINDING]>(EventDetailsKeys.D1_BINDING)
 				.then((binding) => {
 					if (binding) {
