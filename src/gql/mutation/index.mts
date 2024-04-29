@@ -192,13 +192,6 @@ export class MutationIndex extends BaseSchema {
 						}
 					},
 				},
-				hello: {
-					args: {
-						name: { type: new GraphQLNonNull(GraphQLNonEmptyString) },
-					},
-					type: new GraphQLNonNull(GraphQLNonEmptyString),
-					resolve: (obj: {}, args: { name: string }, context: GqlContext, info: GraphQLResolveInfo) => `Hello ${args.name}`,
-				},
 			},
 		});
 	}
