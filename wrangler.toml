@@ -31,3 +31,8 @@ d1_databases = [
 
 [env.production.placement]
 mode = "smart"
+
+
+[dev]
+local_protocol = "https"
+ip = "localhost"

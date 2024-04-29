@@ -3,7 +3,7 @@
 	"scripts": {
 		"fmt": "prettier --write .",
 		"fmt.check": "prettier --check .",
-		"start": "wrangler dev --local-protocol https --ip localhost"
+		"start": "wrangler dev"
 	},
 	"repository": {
 		"type": "git",
