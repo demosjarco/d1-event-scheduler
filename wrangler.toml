@@ -7,8 +7,16 @@ workers_dev = false
 minify = true
 durable_objects.bindings = [
     { name = "D1_EVENT_SCHEDULER", class_name = "D1EventScheduler" },
+    { name = "D1_EVENT", class_name = "D1Event" },
 ]
-migrations = [{ tag = "v1", new_classes = ["D1EventScheduler"] }]
+migrations = [
+    { tag = "v1", new_classes = [
+        "D1EventScheduler",
+    ] },
+    { tag = "v2", new_classes = [
+        "D1Event",
+    ] },
+]
 d1_databases = [
     # { binding = "DB", database_name = "EXAMPLE", database_id = "example-db-id-goes-here", preview_database_id = "example-db-id-goes-here" },
 ]
@@ -23,8 +31,16 @@ compatibility_flags = ["nodejs_compat", "brotli_content_encoding"]
 route = { pattern = "event-scheduler.d1.demosjarco.dev", custom_domain = true }
 durable_objects.bindings = [
     { name = "D1_EVENT_SCHEDULER", class_name = "D1EventScheduler" },
+    { name = "D1_EVENT", class_name = "D1Event" },
 ]
-migrations = [{ tag = "v1", new_classes = ["D1EventScheduler"] }]
+migrations = [
+    { tag = "v1", new_classes = [
+        "D1EventScheduler",
+    ] },
+    { tag = "v2", new_classes = [
+        "D1Event",
+    ] },
+]
 d1_databases = [
     { binding = "FSDB", database_name = "fortnitestw", database_id = "13310a9d-4dca-4c17-9000-8d674933551c", preview_database_id = "53d69581-a8a7-46de-b140-281071cab2eb" },
 ]

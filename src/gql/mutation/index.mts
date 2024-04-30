@@ -1,6 +1,7 @@
 import { GraphQLBoolean, GraphQLEnumType, GraphQLError, GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, type GraphQLResolveInfo } from 'graphql';
 import { GraphQLDateTimeISO, GraphQLJSON, GraphQLJSONObject, GraphQLNonEmptyString, GraphQLPositiveInt, GraphQLTimeZone } from 'graphql-scalars';
-import { EventDetailsKeys, type EventDetail, type EventDetailGQL } from '../../do/types.mjs';
+import type { D1Event } from '../../do/D1Event.mjs';
+import { EventDetailsKeys, type EventDetailGQL } from '../../do/types.mjs';
 import { BaseSchema } from '../../shared/baseSchema.mjs';
 import type { GqlContext } from '../../types.mjs';
 
@@ -131,26 +132,9 @@ export class MutationIndex extends BaseSchema {
 						},
 					},
 					type: GraphQLJSON,
-					resolve: async (obj: {}, args: EventDetailGQL, context: GqlContext, info: GraphQLResolveInfo) => {
+					resolve: (obj: {}, args: EventDetailGQL, context: GqlContext, info: GraphQLResolveInfo) => {
 						if (args[EventDetailsKeys.EVENT_DEFINITION].length > 0) {
-							const doId = context.D1_EVENT_SCHEDULER.idFromName(args[EventDetailsKeys.EVENT_NAME]);
-							const response = await context.D1_EVENT_SCHEDULER.get(doId).fetch(
-								new Request(new URL(doId.toString(), 'https://d1.event'), {
-									method: 'POST',
-									headers: {
-										'Content-Type': 'application/json',
-									},
-									// @ts-expect-error
-									cf: context.request.cf,
-									body: JSON.stringify(args),
-								}),
-							);
-
-							try {
-								return await response.json<EventDetail>();
-							} catch (error) {
-								throw new GraphQLError((error as Error).message);
-							}
+							return context.D1_EVENT.get(context.D1_EVENT.idFromName(args[EventDetailsKeys.EVENT_NAME])).setEvent(args) as ReturnType<D1Event['setEvent']>;
 						} else {
 							throw new GraphQLError('No `sqls` provided');
 						}
@@ -172,21 +156,9 @@ export class MutationIndex extends BaseSchema {
 						info: GraphQLResolveInfo,
 					) => {
 						if (args.id || args.name) {
-							const id = args.id ?? context.D1_EVENT_SCHEDULER.idFromName(args.name!).toString();
+							const id = args.id ?? context.D1_EVENT.idFromName(args.name!).toString();
 
-							const response = await context.D1_EVENT_SCHEDULER.get(context.D1_EVENT_SCHEDULER.idFromString(id)).fetch(
-								new Request(new URL(`/${id}`, 'https://d1.event'), {
-									method: 'DELETE',
-									// @ts-expect-error
-									cf: context.request.cf,
-								}),
-							);
-
-							try {
-								return await response.json();
-							} catch (error) {
-								throw new GraphQLError((error as Error).message);
-							}
+							return context.D1_EVENT.get(context.D1_EVENT.idFromString(id)).deleteEvent() as ReturnType<D1Event['deleteEvent']>;
 						} else {
 							throw new GraphQLError('You must provide either id or name');
 						}

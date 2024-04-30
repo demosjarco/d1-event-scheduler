@@ -1,5 +1,7 @@
 import type { GraphQLFieldConfigArgumentMap, GraphQLScalarType } from 'graphql';
 import type { Context } from 'hono';
+import type { D1Event } from './do/D1Event.mjs';
+import type { D1EventScheduler } from './do/D1EventScheduler.mjs';
 
 export type AppContext = Context<{ Bindings: EnvVars }> | CustomContext<EnvVars>;
 
@@ -19,7 +21,8 @@ export interface EnvVars extends Secrets, Bindings, Record<string, any> {
 interface Secrets extends Record<string, any> {}
 
 interface Bindings {
-	D1_EVENT_SCHEDULER: DurableObjectNamespace;
+	D1_EVENT_SCHEDULER: DurableObjectNamespace<D1EventScheduler>;
+	D1_EVENT: DurableObjectNamespace<D1Event>;
 }
 
 export interface GqlContext extends EnvVars, ExecutionContext {
