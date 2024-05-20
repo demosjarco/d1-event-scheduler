@@ -24,7 +24,7 @@
 		"graphql": "^16.8.1",
 		"graphql-scalars": "^1.23.0",
 		"graphql-yoga": "^5.1.1",
-		"hono": "^4.3.2",
+		"hono": "^4.3.8",
 		"sofa-api": "^0.18.3"
 	},
 	"devDependencies": {
