@@ -28,7 +28,7 @@
 		"sofa-api": "^0.18.3"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20240502.0",
+		"@cloudflare/workers-types": "^4.20240512.0",
 		"@demosjarco/prettier-config": "^1.0.1",
 		"prettier": "^3.2.5",
 		"typescript": "^5.4.5",
