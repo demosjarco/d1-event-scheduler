@@ -1,4 +1,4 @@
-import type { GraphQLFieldConfigArgumentMap, GraphQLObjectType, GraphQLResolveInfo} from 'graphql';
+import type { GraphQLFieldConfigArgumentMap, GraphQLObjectType, GraphQLResolveInfo } from 'graphql';
 import { GraphQLSchema } from 'graphql';
 import type { ArgsType, GqlContext } from '../types.mjs';
 import { Base } from './base.mjs';
