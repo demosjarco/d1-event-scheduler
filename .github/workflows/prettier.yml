@@ -77,12 +77,17 @@ jobs:
           else
             echo "changes=false" >> $GITHUB_OUTPUT
           fi
+      - run: git add --all
+        if: steps.changes.outputs.changes == 'true'
+      - name: Don't touch package files
+        if: steps.changes.outputs.changes == 'true'
+        run: git reset -- package*.json
       - name: Git Setup
         if: steps.changes.outputs.changes == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-      - run: git commit -am "Ran formatter"
+      - run: git commit -m "Ran formatter"
         if: steps.changes.outputs.changes == 'true'
       - run: git push
         if: steps.changes.outputs.changes == 'true'
