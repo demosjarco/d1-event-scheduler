@@ -37,6 +37,9 @@ updates:
       - dependency-name: 'sofa-api'
         versions:
           - '1.0.0'
+          - '0.18.1'
+          - '0.18.2'
+          - '0.18.3'
       # Currently not supported by eslint plugins
       - dependency-name: 'eslint'
         versions:
