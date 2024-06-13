@@ -59,7 +59,7 @@
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
-			"extensions": ["esbenp.prettier-vscode", "github.vscode-github-actions", "tamasfe.even-better-toml", "redhat.vscode-yaml", "github.codespaces"]
+			"extensions": ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint", "github.vscode-github-actions", "tamasfe.even-better-toml", "redhat.vscode-yaml", "github.codespaces"]
 		}
 	},
 

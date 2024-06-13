@@ -1,0 +1,86 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# ESLint is a tool for identifying and reporting on patterns
+# found in ECMAScript/JavaScript code.
+# More details at https://github.com/eslint/eslint
+# and https://eslint.org
+
+name: ESLint
+
+on:
+  push:
+    paths:
+      - '.github/workflows/eslint.yml'
+      - '.eslintrc.*'
+      - '.eslintignore'
+      - 'package*.json'
+      - '**.*ts*'
+  pull_request:
+    paths:
+      - '.github/workflows/eslint.yml'
+      - '.eslintrc.*'
+      - '.eslintignore'
+      - 'package*.json'
+      - '**.*ts*'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      security-events: write
+      actions: read
+    steps:
+      - uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # v2.7.0
+        with:
+          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+          disable-sudo: true
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: lts/*
+          check-latest: true
+          cache: 'npm'
+      - run: npm install -D eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser
+      - run: npm run lint:fix
+        continue-on-error: true
+      - name: Check for Changes
+        id: changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
+          fi
+      - run: git add --all
+        if: steps.changes.outputs.changes == 'true'
+      - name: Don't touch package files
+        if: steps.changes.outputs.changes == 'true'
+        run: |
+          git reset -- package*.json
+          git reset -- **/package*.json
+      - name: Git Setup
+        if: steps.changes.outputs.changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - run: git commit -m "Ran eslint"
+        if: steps.changes.outputs.changes == 'true'
+        continue-on-error: true
+      - run: git push
+        if: steps.changes.outputs.changes == 'true'
+        continue-on-error: true
+      - run: npm install -D @microsoft/eslint-formatter-sarif
+      - run: npm run lint -- --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
+        continue-on-error: true
+      - uses: github/codeql-action/upload-sarif@8f596b4ae3cb3c588a5c46780b86dd53fef16c52 # v3.25.2
+        id: g_cql_upload
+        with:
+          sarif_file: eslint-results.sarif

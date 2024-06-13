@@ -3,6 +3,8 @@
 	"scripts": {
 		"fmt": "prettier --write .",
 		"fmt.check": "prettier --check .",
+		"lint": "eslint **/*.{ts,*ts,ts*}",
+		"lint:fix": "npm run lint -- --fix",
 		"start": "wrangler dev"
 	},
 	"repository": {
@@ -30,6 +32,10 @@
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20240605.0",
 		"@demosjarco/prettier-config": "^1.0.1",
+		"@types/eslint": "^8.56.10",
+		"@typescript-eslint/eslint-plugin": "^7.13.0",
+		"@typescript-eslint/parser": "^7.13.0",
+		"eslint": "^8.57.0",
 		"prettier": "^3.2.5",
 		"typescript": "^5.4.5",
 		"wrangler": "^3.57.1"
