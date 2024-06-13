@@ -37,6 +37,10 @@ updates:
       - dependency-name: 'sofa-api'
         versions:
           - '1.0.0'
+      # Currently not supported by eslint plugins
+      - dependency-name: 'eslint'
+        versions:
+          - '>=9.0.0'
     groups:
       graphql:
         patterns:
