@@ -50,6 +50,7 @@ updates:
           - '@hono/*'
       cloudflare:
         patterns:
+          - 'cloudflare'
           - '@cloudflare/*'
           - 'wrangler'
         exclude-patterns:
