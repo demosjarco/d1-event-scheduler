@@ -1,7 +1,7 @@
 import { DurableObject } from 'cloudflare:workers';
 import type { EnvVars } from '../types.mjs';
 import type { D1Event } from './D1Event.mjs';
-import { type DefinedEvent } from './types.mjs';
+import type { DefinedEvent } from './types.mjs';
 
 export class D1EventScheduler extends DurableObject<EnvVars> {
 	public get events() {
