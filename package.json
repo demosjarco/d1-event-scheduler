@@ -30,7 +30,7 @@
 		"sofa-api": "^0.18.0"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20240605.0",
+		"@cloudflare/workers-types": "^4.20240614.0",
 		"@demosjarco/prettier-config": "^1.0.1",
 		"@types/eslint": "^8.56.10",
 		"@typescript-eslint/eslint-plugin": "^7.13.0",
