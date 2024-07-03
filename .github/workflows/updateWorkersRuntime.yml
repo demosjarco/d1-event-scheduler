@@ -50,5 +50,5 @@ jobs:
           git config user.name "dependabot[bot]"
           git config user.email "dependabot[bot]@users.noreply.github.com"
       - run: find . -maxdepth 2 -name "wrangler.toml" -print0 | xargs -0 git add
-      - run: git commit -m "Update `compatibility_date` in `wrangler.toml`" || echo "`compatibility_date` already up to date"
+      - run: git commit -m "Update \`compatibility_date\` in \`wrangler.toml\`" || echo "`compatibility_date` already up to date"
       - run: git push
