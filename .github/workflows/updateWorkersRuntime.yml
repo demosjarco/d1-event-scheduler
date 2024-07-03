@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   update-toml:
-    if: startsWith(github.event.pull_request.head.ref, 'dependabot/npm_and_yarn/') && contains(github.event.pull_request.head.ref, '/cloudflare') && github.actor == 'dependabot[bot]'
+    if: github.event_name == 'workflow_dispatch' || (startsWith(github.event.pull_request.head.ref, 'dependabot/npm_and_yarn/') && contains(github.event.pull_request.head.ref, '/cloudflare-') && github.actor == 'dependabot[bot]')
     runs-on: ubuntu-latest
     permissions:
       contents: write
