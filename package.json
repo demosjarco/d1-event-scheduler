@@ -38,6 +38,6 @@
 		"eslint": "^8.57.0",
 		"prettier": "^3.3.2",
 		"typescript": "^5.5.2",
-		"wrangler": "^3.62.0"
+		"wrangler": "^3.63.1"
 	}
 }
