@@ -55,7 +55,7 @@ app.on(validApiMethods, '/*', async (c) =>
 		openAPI: {
 			info: {
 				title: 'D1 Event Scheduler',
-				version: (runningLocally(c.req.raw as unknown as Request) ? 'Local' : c.env.GIT_HASH ?? 'Live').toLocaleUpperCase(),
+				version: (runningLocally(c.req.raw as unknown as Request) ? 'Local' : (c.env.GIT_HASH ?? 'Live')).toLocaleUpperCase(),
 			},
 			// Needs `/` to carry over route from hono
 			servers: [{ url: '/' }],
