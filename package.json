@@ -21,7 +21,7 @@
 	"homepage": "https://github.com/demosjarco/d1-event-scheduler#readme",
 	"prettier": "@demosjarco/prettier-config",
 	"dependencies": {
-		"@graphql-yoga/plugin-defer-stream": "^3.6.0",
+		"@graphql-yoga/plugin-defer-stream": "^3.6.1",
 		"cron-parser": "^4.9.0",
 		"graphql": "^16.9.0",
 		"graphql-scalars": "^1.23.0",
