@@ -17,7 +17,7 @@ export class QueryIndex extends BaseSchema {
 						name: { type: GraphQLNonEmptyString },
 					},
 					resolve: (
-						obj: {},
+						obj: object,
 						args: {
 							id?: string;
 							name?: string;

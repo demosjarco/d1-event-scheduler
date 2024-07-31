@@ -132,7 +132,7 @@ export class MutationIndex extends BaseSchema {
 						},
 					},
 					type: GraphQLJSON,
-					resolve: (obj: {}, args: EventDetailGQL, context: GqlContext, info: GraphQLResolveInfo) => {
+					resolve: (obj: object, args: EventDetailGQL, context: GqlContext, info: GraphQLResolveInfo) => {
 						if (args[EventDetailsKeys.EVENT_DEFINITION].length > 0) {
 							return context.D1_EVENT.get(context.D1_EVENT.idFromName(args[EventDetailsKeys.EVENT_NAME])).setEvent(args) as ReturnType<D1Event['setEvent']>;
 						} else {
@@ -147,7 +147,7 @@ export class MutationIndex extends BaseSchema {
 					},
 					type: new GraphQLNonNull(GraphQLJSONObject),
 					resolve: async (
-						obj: {},
+						obj: object,
 						args: {
 							id?: string;
 							name?: string;
