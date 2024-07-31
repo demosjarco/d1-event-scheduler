@@ -204,7 +204,9 @@ export class D1Event extends DurableObject<EnvVars> {
 								.get<EventDetail[EventDetailsKeys.AUTO_DELETE]>(EventDetailsKeys.AUTO_DELETE)
 								.then((autoDelete) => {
 									if (autoDelete) {
-										this.deleteEvent().then(resolve).catch(reject);
+										this.deleteEvent()
+											.then(() => resolve())
+											.catch(reject);
 									} else {
 										resolve();
 									}
