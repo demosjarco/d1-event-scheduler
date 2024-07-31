@@ -4,8 +4,7 @@ import type { ArgsType, GqlContext } from '../types.mjs';
 import { Base } from './base.mjs';
 
 export abstract class BaseSchema extends Base {
-	// @ts-ignore
-	protected argsType: GraphQLFieldConfigArgumentMap;
+	protected argsType: GraphQLFieldConfigArgumentMap = {};
 	protected queryType: GraphQLObjectType | undefined;
 	protected mutationType: GraphQLObjectType | undefined;
 
