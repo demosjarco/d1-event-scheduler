@@ -44,7 +44,7 @@ export abstract class BaseSchema extends Base {
 	}
 
 	// Resolving queries
-	public async gqlResolve(obj = {}, args: ArgsType<typeof this.argsType> = {}, context: GqlContext, info: GraphQLResolveInfo): Promise<Record<string, unknown>> {
+	public async gqlResolve(obj: object = {}, args: ArgsType<typeof this.argsType> = {}, context: GqlContext, info: GraphQLResolveInfo): Promise<Record<string, unknown>> {
 		return {};
 	}
 
