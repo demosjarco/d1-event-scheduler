@@ -1,9 +1,9 @@
 {
 	"type": "module",
 	"scripts": {
-		"fmt": "prettier --write .",
-		"fmt.check": "prettier --check .",
-		"lint": "eslint **/*.{ts,*ts,ts*}",
+		"fmt": "prettier --check .",
+		"fmt:fix": "prettier --write .",
+		"lint": "eslint .",
 		"lint:fix": "npm run lint -- --fix",
 		"start": "wrangler dev"
 	},
