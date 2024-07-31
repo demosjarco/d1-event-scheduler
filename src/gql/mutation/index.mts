@@ -1,4 +1,4 @@
-import { GraphQLBoolean, GraphQLEnumType, GraphQLError, GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, type GraphQLResolveInfo } from 'graphql';
+import { GraphQLBoolean, GraphQLEnumType, GraphQLError, GraphQLID, GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { GraphQLDateTimeISO, GraphQLJSON, GraphQLJSONObject, GraphQLNonEmptyString, GraphQLPositiveInt, GraphQLTimeZone } from 'graphql-scalars';
 import type { D1Event } from '../../do/D1Event.mjs';
 import { EventDetailsKeys, type EventDetailGQL } from '../../do/types.mjs';
@@ -132,7 +132,7 @@ export class MutationIndex extends BaseSchema {
 						},
 					},
 					type: GraphQLJSON,
-					resolve: (obj: object, args: EventDetailGQL, context: GqlContext, info: GraphQLResolveInfo) => {
+					resolve: (obj: object, args: EventDetailGQL, context: GqlContext) => {
 						if (args[EventDetailsKeys.EVENT_DEFINITION].length > 0) {
 							return context.D1_EVENT.get(context.D1_EVENT.idFromName(args[EventDetailsKeys.EVENT_NAME])).setEvent(args) as ReturnType<D1Event['setEvent']>;
 						} else {
@@ -153,7 +153,6 @@ export class MutationIndex extends BaseSchema {
 							name?: string;
 						},
 						context: GqlContext,
-						info: GraphQLResolveInfo,
 					) => {
 						if (args.id || args.name) {
 							const id = args.id ?? context.D1_EVENT.idFromName(args.name!).toString();

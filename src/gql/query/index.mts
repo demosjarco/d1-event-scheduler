@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLObjectType, type GraphQLResolveInfo } from 'graphql';
+import { GraphQLID, GraphQLObjectType } from 'graphql';
 import { GraphQLJSON, GraphQLNonEmptyString } from 'graphql-scalars';
 import type { D1Event } from '../../do/D1Event.mjs';
 import type { D1EventScheduler } from '../../do/D1EventScheduler.mjs';
@@ -23,7 +23,6 @@ export class QueryIndex extends BaseSchema {
 							name?: string;
 						},
 						context: GqlContext,
-						info: GraphQLResolveInfo,
 					) => {
 						if (args.id || args.name) {
 							const id = args.id ?? context.D1_EVENT.idFromName(args.name!).toString();
