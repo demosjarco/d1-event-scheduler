@@ -1,0 +1,36 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build",
+			"dependsOn": ["Lint", "Types"],
+			"isBackground": true,
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Lint",
+			"type": "npm",
+			"script": "lint",
+			"problemMatcher": "$eslint-stylish",
+			"icon": {
+				"id": "lightbulb-autofix",
+				"color": "terminal.ansiGreen"
+			}
+		},
+		{
+			"label": "Types",
+			"type": "typescript",
+			"tsconfig": "tsconfig.json",
+			"option": "watch",
+			"problemMatcher": ["$tsc-watch"],
+			"isBackground": true,
+			"icon": {
+				"id": "symbol-type-parameter",
+				"color": "terminal.ansiBlue"
+			}
+		}
+	]
+}
