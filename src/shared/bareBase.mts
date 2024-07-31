@@ -5,8 +5,7 @@ export interface BareBaseHelpers {
 }
 
 export abstract class BareBase<T extends BareBaseHelpers = BareBaseHelpers> {
-	// @ts-ignore
-	protected helpers: T = {};
+	protected helpers: T;
 
 	constructor(helpers: T) {
 		this.helpers = helpers;
