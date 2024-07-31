@@ -7,7 +7,6 @@ import { etag } from 'hono/etag';
 import { secureHeaders } from 'hono/secure-headers';
 import { timing } from 'hono/timing';
 import { useSofa } from 'sofa-api';
-import { runningLocally } from './extras.mjs';
 import { ApiSchema } from './gql/index.mjs';
 import type { EnvVars } from './types.mjs';
 
@@ -55,7 +54,7 @@ app.on(validApiMethods, '/*', async (c) =>
 		openAPI: {
 			info: {
 				title: 'D1 Event Scheduler',
-				version: (runningLocally(c.req.raw as unknown as Request) ? 'Local' : (c.env.GIT_HASH ?? 'Live')).toLocaleUpperCase(),
+				version: c.env.GIT_HASH,
 			},
 			// Needs `/` to carry over route from hono
 			servers: [{ url: '/' }],
