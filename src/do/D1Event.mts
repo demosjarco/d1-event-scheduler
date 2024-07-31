@@ -13,14 +13,17 @@ export class D1Event extends DurableObject<EnvVars> {
 	}
 
 	public async setEvent(incoming: EventDetailGQL): Promise<EventDetail> {
-		if (incoming[EventDetailsKeys.EVENT_TYPE] === 'ONE TIME') {
-			if (!incoming[EventDetailsKeys.EXECUTE_AT]) {
-				throw new Error(`Missing ${EventDetailsKeys.EXECUTE_AT}`);
-			}
-		} else if (incoming[EventDetailsKeys.EVENT_TYPE] === 'RECURRING') {
-			if (!incoming[EventDetailsKeys.CRON] && !(incoming[EventDetailsKeys.INTERVAL_VALUE] !== undefined && incoming[EventDetailsKeys.INTERVAL_FIELD])) {
-				throw new Error(`Missing ${EventDetailsKeys.CRON} or (${EventDetailsKeys.INTERVAL_VALUE} and ${EventDetailsKeys.INTERVAL_FIELD})`);
-			}
+		switch (incoming[EventDetailsKeys.EVENT_TYPE]) {
+			case 'ONE TIME':
+				if (!incoming[EventDetailsKeys.EXECUTE_AT]) {
+					throw new Error(`Missing ${EventDetailsKeys.EXECUTE_AT}`);
+				}
+				break;
+			case 'RECURRING':
+				if (!incoming[EventDetailsKeys.CRON] && !(incoming[EventDetailsKeys.INTERVAL_VALUE] !== undefined && incoming[EventDetailsKeys.INTERVAL_FIELD])) {
+					throw new Error(`Missing ${EventDetailsKeys.CRON} or (${EventDetailsKeys.INTERVAL_VALUE} and ${EventDetailsKeys.INTERVAL_FIELD})`);
+				}
+				break;
 		}
 
 		const saving: EventDetail = {
