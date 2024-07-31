@@ -141,7 +141,7 @@ export class D1Event extends DurableObject<EnvVars> {
 												try {
 													resolve(D1Event.calculateNextInstance(test.get(EventDetailsKeys.INTERVAL_VALUE) as number, test.get(EventDetailsKeys.INTERVAL_FIELD) as NonNullable<EventDetail[EventDetailsKeys.INTERVAL_FIELD]>, test.get(EventDetailsKeys.STARTS) as Date, test.get(EventDetailsKeys.ENDS) as Date | undefined));
 												} catch (error) {
-													reject('Date not available');
+													reject(new Error('Date not available', { cause: error }));
 												}
 											} else {
 												reject('Missing cron & interval');
