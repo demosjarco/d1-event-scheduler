@@ -43,7 +43,8 @@ export abstract class BaseSchema extends Base {
 	}
 
 	// Resolving queries
-	public async gqlResolve(obj: object, args: ArgsType<typeof this.argsType>, context: GqlContext, info: GraphQLResolveInfo): Promise<Record<string, unknown>> {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public async gqlResolve(_obj: object, _args: ArgsType<typeof this.argsType>, _context: GqlContext, _info: GraphQLResolveInfo): Promise<Record<string, unknown>> {
 		return {};
 	}
 
