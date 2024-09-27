@@ -22,6 +22,9 @@ d1_databases = [
     # { binding = "DB", database_name = "EXAMPLE", database_id = "example-db-id-goes-here", preview_database_id = "example-db-id-goes-here" },
 ]
 
+[observability]
+enabled = true
+
 [placement]
 mode = "smart"
 
@@ -45,6 +48,9 @@ migrations = [
 d1_databases = [
     { binding = "FSDB", database_name = "fortnitestw", database_id = "13310a9d-4dca-4c17-9000-8d674933551c", preview_database_id = "53d69581-a8a7-46de-b140-281071cab2eb" },
 ]
+
+[env.production.observability]
+enabled = true
 
 [env.production.placement]
 mode = "smart"
