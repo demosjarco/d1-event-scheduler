@@ -84,3 +84,4 @@ jobs:
         id: g_cql_upload
         with:
           sarif_file: eslint-results.sarif
+          wait-for-processing: false
