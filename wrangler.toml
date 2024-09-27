@@ -5,6 +5,7 @@ compatibility_flags = ["nodejs_compat"]
 workers_dev = false
 # route = { pattern = "event-scheduler.example.com", custom_domain = true }
 minify = true
+upload_source_maps = true
 durable_objects.bindings = [
     { name = "D1_EVENT_SCHEDULER", class_name = "D1EventScheduler" },
     { name = "D1_EVENT", class_name = "D1Event" },
