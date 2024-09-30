@@ -80,7 +80,7 @@ jobs:
       - run: npm install -D @microsoft/eslint-formatter-sarif
       - run: npm run lint -- --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
         continue-on-error: true
-      - uses: github/codeql-action/upload-sarif@461ef6c76dfe95d5c364de2f431ddbd31a417628 # v3.26.9
+      - uses: github/codeql-action/upload-sarif@e2b3eafc8d227b0241d48be5f425d47c2d750a13 # v3.26.10
         id: g_cql_upload
         with:
           sarif_file: eslint-results.sarif
