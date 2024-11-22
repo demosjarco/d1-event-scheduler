@@ -28,6 +28,12 @@ updates:
         patterns:
           - 'actions/cache'
           - 'actions/cache/*'
+      sast:
+        patterns:
+          - 'github/codeql-*'
+          - 'actions/dependency-review-action'
+          - 'step-security/*'
+          - 'microsoft/security-devops-action'
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
