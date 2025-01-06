@@ -21,13 +21,13 @@
 	"homepage": "https://github.com/demosjarco/d1-event-scheduler#readme",
 	"prettier": "@demosjarco/prettier-config",
 	"dependencies": {
-		"@graphql-yoga/plugin-defer-stream": "^3.10.3",
+		"@graphql-yoga/plugin-defer-stream": "^3.10.9",
 		"cron-parser": "^4.9.0",
-		"graphql": "^16.9.0",
-		"graphql-scalars": "^1.23.0",
+		"graphql": "^16.10.0",
+		"graphql-scalars": "^1.24.0",
 		"graphql-yoga": "^5.1.1",
 		"hono": "^4.6.11",
-		"sofa-api": "^0.18.7"
+		"sofa-api": "^0.18.8"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20241112.0",
