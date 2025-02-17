@@ -22,7 +22,7 @@
 	"prettier": "@demosjarco/prettier-config",
 	"dependencies": {
 		"@graphql-yoga/plugin-defer-stream": "^3.10.3",
-		"cron-parser": "^4.9.0",
+		"cron-parser": "^5.0.1",
 		"graphql": "^16.9.0",
 		"graphql-scalars": "^1.23.0",
 		"graphql-yoga": "^5.1.1",
